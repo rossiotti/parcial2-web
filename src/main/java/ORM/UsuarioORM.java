@@ -63,6 +63,19 @@ public class UsuarioORM {
 
     }
 
+    public Usuario getUsuarioEmail(String email, String pass){
+
+        try{
+            Query query = em.createQuery("select u from Usuario u where u.email = :email AND u.password = :pass")
+                    .setParameter("email", email)
+                    .setParameter("pass", pass);
+            return (Usuario)query.getSingleResult();
+        } catch(NoResultException e){
+            return null;
+        }
+
+    }
+
     public Usuario getUsuarioId(Long id){
 
         try{

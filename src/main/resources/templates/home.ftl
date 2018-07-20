@@ -92,13 +92,18 @@
                     <div class="mdl-card__supporting-text">
                         <form action="/login" method="post" id="loginForm" novalidate="novalidate">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="loginUsername" id="loginUsername">
-                                <label class="mdl-textfield__label" for="loginUsername">Username</label>
+                                <input class="mdl-textfield__input" type="text" name="username" id="loginUsername" placeholder="Username o Email">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="password" name="loginPassword" id="loginPassword">
-                                <label class="mdl-textfield__label" for="loginPassword">Password</label>
+                                <input class="mdl-textfield__input" type="password" name="password" id="loginPassword" placeholder="Contraseña">
                             </div>
+                            <div>
+                                <input class="form-check-input" type="checkbox" name="keepLog">
+                                <label class="form-check-label" for="keepLog">
+                                    <strong>Recuerdame</strong>
+                                </label>
+                            </div>
+
 
                             <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Login<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
                         </form>
@@ -131,26 +136,28 @@
                         </div>
                     </div>
                     <div class="mdl-card__supporting-text">
-                        <form action="http://themelooks.us/demo/popforms/preview/#" method="post" id="signupForm" novalidate="novalidate">
+                        <form action="/registrar" method="post" id="signupForm" novalidate="novalidate">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="singupName" id="singupName">
-                                <label class="mdl-textfield__label" for="singupName">Full Name</label>
+                                <input class="mdl-textfield__input" type="text" name="nombre" id="singupName" placeholder="Nombre" required>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="singupUsername" id="singupUsername">
-                                <label class="mdl-textfield__label" for="singupUsername">Username</label>
+                                <input class="mdl-textfield__input" type="text" name="apellidos" id="singupApellidos" placeholder="Apellidos"required>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="singupEmail" id="singupEmail">
-                                <label class="mdl-textfield__label" for="singupEmail">E-mail Address</label>
+                                <input class="mdl-textfield__input" type="text" name="username" id="singupUsername" placeholder="Username"required>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="password" name="singupPassword" id="singupPassword">
-                                <label class="mdl-textfield__label" for="singupPassword">Password</label>
+                                <input class="mdl-textfield__input" type="text" name="email" id="singupEmail" placeholder="Email"required>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="password" name="singupPasswordAgain" id="singupPasswordAgain">
-                                <label class="mdl-textfield__label" for="singupPasswordAgain">Re-Type Password</label>
+                                <input class="mdl-textfield__input" type="password" name="password" id="singupPassword" placeholder="Contraseña"required>
+                            </div>
+                            <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                                <input class="mdl-textfield__input" type="password" name="rePassword" id="singupPasswordAgain"placeholder="Rescriba la contraseña"required>
+                            </div>
+
+                            <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                                <input class="mdl-textfield__input" type="date" name="fechaNacimiento" id="singupPasswordAgain"placeholder="Fecha de Nacimiento"required>
                             </div>
 
                             <button type="submit" class="singup-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Signup<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>

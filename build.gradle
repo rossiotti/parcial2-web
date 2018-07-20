@@ -21,5 +21,10 @@ dependencies {
     compile 'org.hibernate:hibernate-entitymanager:5.1.0.Final'
     compile 'io.getstream.client:stream-repo-apache:1.2.0'
     compile group: 'org.jasypt', name: 'jasypt', version: '1.9.2'
+    // https://mvnrepository.com/artifact/javax.mail/javax.mail-api
+    compile 'com.sun.mail:javax.mail:1.6.0'
+// https://mvnrepository.com/artifact/javax.activation/activation
+    compile group: 'javax.activation', name: 'activation', version: '1.1'
+
 
 }

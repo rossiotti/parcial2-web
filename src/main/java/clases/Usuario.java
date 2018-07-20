@@ -1,7 +1,6 @@
 package clases;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -17,7 +16,7 @@ public class Usuario {
     private String apellidos;
     private String email;
     private String password;
-    private Date nacimientoFecha;
+    private String nacimientoFecha;
     private String lugarNacimiento;
     private String lugarResidencia;
     private String lugarEstudio;
@@ -78,11 +77,11 @@ public class Usuario {
         this.password = password;
     }
 
-    public Date getNacimientoFecha() {
+    public String getNacimientoFecha() {
         return nacimientoFecha;
     }
 
-    public void setNacimientoFecha(Date nacimientoFecha) {
+    public void setNacimientoFecha(String nacimientoFecha) {
         this.nacimientoFecha = nacimientoFecha;
     }
 
