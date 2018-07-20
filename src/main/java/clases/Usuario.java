@@ -29,6 +29,7 @@ public class Usuario {
     private boolean admin;
 
 
+
     public Long getId() {
         return id;
     }
@@ -132,4 +133,6 @@ public class Usuario {
     public void setAmigos(List<Usuario> amigos) {
         this.amigos = amigos;
     }
+
+
 }
