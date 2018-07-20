@@ -8,6 +8,7 @@
     <script src="js/jquery-3.2.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="css/bootstrap-switch.min.css">
     <script src="js/bootstrap-switch.min.js"></script>
     <script src="js/twemoji.min.js"></script>
@@ -65,17 +66,17 @@
     </div>
     <div class="second-icon dropdown menu-icon">
             <span class="dropdown-toggle" role="button" id="dropdownNotification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        <span class="hidden-xs hidden-sm">Notifications</span> <i class="fa fa-bell-o" aria-hidden="true"></i> <span class="badge">2</span>
+        <span class="hidden-xs hidden-sm">Notifications</span> <i class="fa fa-bell" aria-hidden="true"></i> <span class="badge">2</span>
             </span>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNotification">
             <li class="new-not">
-                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="./Wall Template_files/user2.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user2.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
             </li>
             <li class="new-not">
-                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="./Wall Template_files/user3.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user3.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
             </li>
             <li>
-                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="./Wall Template_files/user4.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user4.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
             </li>
             <li role="separator" class="divider"></li>
             <li><a href="https://socialyte.codeplus.it/wall.html#" title="All notifications">All Notifications</a></li>
@@ -94,7 +95,7 @@
 <!--Left Sidebar with info Profile -->
 <div class="sidebar-nav">
     <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
-        <img src="./Wall Template_files/user.jpg" alt="User name" class="img-circle img-user">
+        <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
     <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">My User</a></h2>
     <p class="text-center user-description hidden-xs">
@@ -110,7 +111,7 @@
             <div class="row">
                 <div class="col-xs-3 col-sm-2">
                     <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
-                        <img src="./Wall Template_files/user.jpg" alt="User name" class="img-circle img-user">
+                        <img src="img/user.jpg" alt="User name" class="img-circle img-user">
                     </a>
                 </div>
                 <div class="col-xs-9 col-sm-10 info-user">
@@ -142,7 +143,7 @@
             <div class="row">
                 <div class="col-xs-3 col-sm-2">
                     <a href="https://socialyte.codeplus.it/user-profile.html" title="User Profile">
-                        <img src="./Wall Template_files/user2.jpg" alt="User name" class="img-circle img-user">
+                        <img src="img/user2.jpg" alt="User name" class="img-circle img-user">
                     </a>
                 </div>
                 <div class="col-xs-9 col-sm-10 info-user">
@@ -153,9 +154,9 @@
             <div class="row">
                 <div class=" col-sm-8 col-sm-offset-2 data-post">
                     <p>Lorem Ipsum Dolor si amet</p>
-                    <img src="./Wall Template_files/post.jpg" alt="image post" class="img-post">
+                    <img src="img/post.jpg" alt="image post" class="img-post">
                     <div class="reaction">
-                        <img draggable="false" class="emoji" alt="❤" src="./Wall Template_files/2764.png"> 1234 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
+                        <img draggable="false" class="emoji" alt="❤" src="img/2764.png"> 1234 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
                     </div>
                     <div class="comments">
                         <div class="more-comments">View more comments</div>
@@ -175,7 +176,7 @@
             <div class="row">
                 <div class="col-xs-3 col-sm-2">
                     <a href="https://socialyte.codeplus.it/personal-profile.html" title="User Profile">
-                        <img src="./Wall Template_files/user.jpg" alt="User name" class="img-circle img-user">
+                        <img src="img/user.jpg" alt="User name" class="img-circle img-user">
                     </a>
                 </div>
                 <div class="col-xs-9 col-sm-10 info-user">
