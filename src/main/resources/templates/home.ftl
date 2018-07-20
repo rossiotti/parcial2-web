@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PopForms Material Design Modal Forms</title>
+    <title>BingoBook</title>
 
 
     <!-- ====Google Font CSS==== -->
@@ -37,6 +37,35 @@
 <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script>
+
+        function validateEmail(email) {
+            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+        function validateForm() {
+            var x = document.forms["registerForm"]["password"].value;
+            var y = document.forms["registerForm"]["rePassword"].value;
+            var e = document.forms["registerForm"]["email"].value;
+
+            if(x !== y){
+                alert("Las Contraseñas no conciden.");
+                return false;
+            }
+
+            if(x.length<6){
+                alert("La contraseña debe tener un minimo de 6 caracteres.");
+                document.getElementById("singupPassword").style.borderColor= 'red';
+                return false;
+            }
+
+            if(validateEmail(e) !== true){
+                alert("Email no valido");
+                document.getElementById("singupEmail").style.borderColor= 'red';
+                return false;
+            }
+        }
+    </script>
 </head>
 <body>
 <!-- Top Navigation Bar Start -->
@@ -136,7 +165,7 @@
                         </div>
                     </div>
                     <div class="mdl-card__supporting-text">
-                        <form action="/registrar" method="post" id="signupForm" novalidate="novalidate">
+                        <form action="/registrar" method="post" id="signupForm" novalidate="novalidate" name="registerForm" onsubmit="return validateForm()">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
                                 <input class="mdl-textfield__input" type="text" name="nombre" id="singupName" placeholder="Nombre" required>
                             </div>
@@ -150,7 +179,7 @@
                                 <input class="mdl-textfield__input" type="text" name="email" id="singupEmail" placeholder="Email"required>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="password" name="password" id="singupPassword" placeholder="Contraseña"required>
+                                <input class="mdl-textfield__input" type="password" name="password" id="singupPassword"  placeholder="Contraseña"required>
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
                                 <input class="mdl-textfield__input" type="password" name="rePassword" id="singupPasswordAgain"placeholder="Rescriba la contraseña"required>
