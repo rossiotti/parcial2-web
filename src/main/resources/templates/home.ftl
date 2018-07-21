@@ -43,29 +43,70 @@
             var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(email);
         }
+
+        function isValidDate(dateString)
+        {
+
+            // Parse the date parts to integers
+            var parts = dateString.split("-");
+            var year = parseInt(parts[0], 10);
+            var today = new Date();
+            var minAge = today.getFullYear() - year;
+            alert(minAge);
+            // Check the ranges of month and year
+            if(minAge < 13 || year > today.getFullYear() || dateString.length > 10)
+                return true;
+            else
+                return false;
+        };
+
         function validateForm() {
             var x = document.forms["registerForm"]["password"].value;
             var y = document.forms["registerForm"]["rePassword"].value;
             var e = document.forms["registerForm"]["email"].value;
+            var u = document.forms["registerForm"]["username"].value;
+            var d = document.forms["registerForm"]["fechaNacimiento"].value;
 
             if(x !== y){
                 alert("Las Contraseñas no conciden.");
                 return false;
-            }
 
-            if(x.length<6){
+            } if(x.length<6){
                 alert("La contraseña debe tener un minimo de 6 caracteres.");
                 document.getElementById("singupPassword").style.borderColor= 'red';
                 return false;
-            }
 
-            if(validateEmail(e) !== true){
+            } if(isValidDate(d)){
+                alert("Fecha Invalida");
+                document.getElementById("singupBirthDate").style.borderColor= 'red';
+                return false;
+
+            }if(!validateEmail(e)){
                 alert("Email no valido");
                 document.getElementById("singupEmail").style.borderColor= 'red';
+                return false;
+            }if (/\s/.test(u)) {
+                alert("Username no puede incluir espacios");
+                document.getElementById("singupUsername").style.borderColor = 'red';
                 return false;
             }
         }
     </script>
+
+    <#if invalid??>
+    <#if invalid = 2>
+       <script>
+           alert("Este correo esta en uso")
+           document.getElementById("singupEmail").style.color = 'red';
+       </script>
+    </#if>
+    <#if invalid = 1>
+    <script>
+        alert("Este usuario ya existe")
+        document.getElementById("singupUsername").style.color = 'red';
+    </script>
+    </#if>
+    </#if>
 </head>
 <body>
 <!-- Top Navigation Bar Start -->
@@ -156,7 +197,7 @@
 <div class="modal fade" id="signupFormModal" tabindex="-1" role="dialog" aria-labelledby="signupFormModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <button type="button" class="close" id="btnSignup" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             <div class="signupForm">
                 <div class="mdl-card mdl-shadow--2dp">
                     <div class="mdl-card__title mdl-card--expand">
@@ -167,26 +208,26 @@
                     <div class="mdl-card__supporting-text">
                         <form action="/registrar" method="post" id="signupForm" novalidate="novalidate" name="registerForm" onsubmit="return validateForm()">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="nombre" id="singupName" placeholder="Nombre" required>
+                                <input class="mdl-textfield__input" type="text" name="nombre" id="singupName" placeholder="Nombre" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="apellidos" id="singupApellidos" placeholder="Apellidos"required>
+                                <input class="mdl-textfield__input" type="text" name="apellidos" id="singupApellidos" placeholder="Apellidos" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="username" id="singupUsername" placeholder="Username"required>
+                                <input class="mdl-textfield__input" type="text" name="username" id="singupUsername" placeholder="Username" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="text" name="email" id="singupEmail" placeholder="Email"required>
+                                <input class="mdl-textfield__input" type="text" name="email" id="singupEmail" placeholder="Email" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="password" name="password" id="singupPassword"  placeholder="Contraseña"required>
+                                <input class="mdl-textfield__input" type="password" name="password" id="singupPassword"  placeholder="Contraseña" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="password" name="rePassword" id="singupPasswordAgain"placeholder="Rescriba la contraseña"required>
+                                <input class="mdl-textfield__input" type="password" name="rePassword" id="singupPasswordAgain"placeholder="Rescriba la contraseña" required="required">
                             </div>
 
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <input class="mdl-textfield__input" type="date" name="fechaNacimiento" id="singupPasswordAgain"placeholder="Fecha de Nacimiento"required>
+                                <input class="mdl-textfield__input" type="date" name="fechaNacimiento" id="singupBirthDate"placeholder="Fecha de Nacimiento" required="required">
                             </div>
 
                             <button type="submit" class="singup-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Signup<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>

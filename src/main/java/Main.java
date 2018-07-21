@@ -6,9 +6,6 @@ import org.jasypt.util.text.BasicTextEncryptor;
 import util.EmailValidator;
 
 import java.io.StringWriter;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,6 +57,8 @@ public class Main {
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/home.ftl");
 
+            if(req.queryParams("invalid")!=null)
+                atr.put("invalid",Integer.parseInt(req.queryParams("invalid")));
 
             atr.put("usuario",usuario);
             template.process(atr,writer);
@@ -79,21 +78,12 @@ public class Main {
             return writer;
         });
         post("/login", (req, res) -> {
-            EmailValidator em = new EmailValidator();
             String username = req.queryParams("username");
             String password = req.queryParams("password");
 
-            Usuario usuario = new Usuario();
-            if(username.contains("@")){
-                if(em.validateEmail(username)){
-                    usuario = usuarioORM.getUsuario(username, password);
-                }else{
-                    System.out.println("Email no valido (Hacer algo con esto despues)");
-                }
 
-            }else{
-                   usuario = usuarioORM.getUsuario(username, password);
-            }
+            Usuario  usuario = usuarioORM.getUsuario(username, password);
+
 
             String isRecordado = req.queryParams("keepLog");
             if (usuario != null) {
@@ -115,30 +105,36 @@ public class Main {
 
 
         post("/registrar", (req, res) -> {
-            EmailValidator em = new EmailValidator();
             String username = req.queryParams("username");
             String password = req.queryParams("password");
-            String rePassword = req.queryParams("rePassword");
             String nombre = req.queryParams("nombre");
             String apellidos = req.queryParams("apellidos");
             String email = req.queryParams("email");
             String fechaNacimiento = req.queryParams("fechaNacimiento");
 
-            if(!password.equals(rePassword)){
-            }
-            if(!em.validateEmail(email)){
+            if(usuarioORM.getUsuarioUsername(username)!=null){
+                System.out.println(usuarioORM.getUsuarioUsername(username).getUsername());
+                res.redirect("/inicio?invalid=1");
+            }else if(usuarioORM.getUsuarioEmailVali(email) != null){
+                res.redirect("/inicio?invalid=2");
+            }else{
+                Usuario usuario = new Usuario();
+                usuario.setNombre(nombre);
+                usuario.setUsername(username);
+                usuario.setPassword(password);
+                usuario.setNacimientoFecha(fechaNacimiento);
+                usuario.setEmail(email);
+                usuario.setApellidos(apellidos);
 
+              //  usuarioORM.guardarUsuario(usuario);
+                req.session(true);
+                req.session().attribute("usuario", usuario);
+               // res.redirect("/home");
+                return "";
             }
 
-            Usuario usuario = new Usuario();
-            usuario.setNombre(nombre);
-            usuario.setUsername(username);
-            usuario.setPassword(password);
-            usuario.setNacimientoFecha(fechaNacimiento);
-            usuario.setEmail(email);
-            usuario.setApellidos(apellidos);
+
             return "";
-
         });
     }
 }

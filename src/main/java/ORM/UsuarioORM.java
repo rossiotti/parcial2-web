@@ -76,6 +76,18 @@ public class UsuarioORM {
 
     }
 
+    public Usuario getUsuarioEmailVali(String email){
+
+        try{
+            Query query = em.createQuery("select u from Usuario u where u.email = :email")
+                    .setParameter("email", email);
+            return (Usuario)query.getSingleResult();
+        } catch(NoResultException e){
+            return null;
+        }
+
+    }
+
     public Usuario getUsuarioId(Long id){
 
         try{
