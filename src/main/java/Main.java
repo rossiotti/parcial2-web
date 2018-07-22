@@ -12,6 +12,7 @@ import spark.Session;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static spark.Spark.*;
@@ -36,6 +37,13 @@ public class Main {
             admin.setMuro(new ArrayList<>());
             admin.setNombre("admin");
             admin.setApellidos("admin");
+            admin.setEmail("hokage@admin.com");
+            admin.setNacimientoFecha("10/10/1996");
+            admin.setAmigos(new ArrayList<>());
+            admin.setLugarTrabajo("Como admin en Bingobook");
+            admin.setLugarResidencia("Konoha");
+            admin.setLugarEstudio("La academina ninja");
+            admin.setLugarNacimiento("Konoha");
             usuarioORM.guardarUsuario(admin);
             System.out.println("Admin creado con exito.");
         }
@@ -150,6 +158,8 @@ public class Main {
                 usuario.setEmail(email);
                 usuario.setApellidos(apellidos);
                 usuario.setMuro(new ArrayList<>());
+                usuario.setAmigos(new ArrayList<>());
+                usuario.setAdmin(false);
 
                 usuarioORM.guardarUsuario(usuario);
                 req.session(true);
@@ -174,6 +184,38 @@ public class Main {
             res.redirect("/home");
             return "";
 
+        });
+
+        get("/buscarPersonas", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/friendListRes.ftl");
+            int pagina = Integer.parseInt(req.queryParams("pagina"));
+            System.out.println((req).   queryParams("q"));
+            List<Usuario> filtrados = usuarioORM.listarUsuarios(pagina,req.queryParams("q"));
+            int maxPagina = (int) Math.ceil(filtrados.size() / 5);
+            atr.put("pagina", pagina);
+
+            if(pagina >= maxPagina){
+                atr.put("valorSiguiente", 0);
+            }else{
+                atr.put("valorSiguiente", 1);
+            }
+
+            if(pagina <= 1){
+                atr.put("valorAnterior", 0);
+                System.out.println(pagina);
+            }else{
+                atr.put("valorAnterior", 1);
+            }
+
+            atr.put("anterior", (pagina - 1));
+            atr.put("siguiente", (pagina + 1));
+            atr.put("resultados",filtrados);
+            atr.put("usuario",usuario);
+            template.process(atr,writer);
+            return writer;
         });
 
         post("/:id/comentar", (req, res) -> {
@@ -204,6 +246,25 @@ public class Main {
             usuarioORM.editarUsuario(usuario);
             res.redirect("/home");
             return null;
+        });
+
+        post("/agregarAmigo", (req, res) -> {
+
+            Usuario usuario = req.session(true).attribute("usuario");
+            String texto = req.queryParams("id");
+            Usuario amigo = usuarioORM.getUsuarioId(Long.parseLong(texto));
+            if(usuario.getAmigos().size()==0)
+                usuarioORM.agregarAmigo(usuario,amigo);
+            for(int i = 0; i<usuario.getAmigos().size(); i++){
+                if(!usuario.getAmigos().get(i).getId().equals(amigo.getId())){
+                        usuarioORM.agregarAmigo(usuario,amigo);
+
+                }
+            }
+
+            res.redirect("/home");
+            return "";
+
         });
     }
 }

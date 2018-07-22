@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0039)https://socialyte.codeplus.it/wall.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Wall Template</title>
+    <title>Resultados</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -19,7 +18,7 @@
     <#if !usuario.lugarNacimiento??>
     <script type="text/javascript">
         $(window).on('load',function(){
-            $('#InfoFormModal').modal('show');
+            $('#InfoFormModal').modal({backdrop: 'static', keyboard: false, modal('show')} );
         });
     </script>
       <div>
@@ -45,8 +44,9 @@
 
 <!--Header with Nav -->
 <header class="text-right">
-    <form class="text-left search" method="GET">
+    <form action="/buscarPersonas" class="text-left search" method="GET">
         <input name="q" type="text" placeholder="Search..">
+        <input type="hidden" name="pagina" value="1">
     </form>
     <div class="menu-icon">
         <div class="dropdown">
@@ -65,7 +65,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://socialyte.codeplus.it/wall.html#" title="Settings">
+                    <a href="" title="Settings">
                         <div class="col-xs-4">
                             <i class="fa fa-question" aria-hidden="true"></i>
                         </div>
@@ -120,9 +120,22 @@
     <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
         <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
-    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuario.username}</a></h2>
+    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuario.nombre} ${usuario.apellidos}</a></h2>
     <p class="text-center user-description hidden-xs">
-        <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</i>
+        <ul>
+    <#if usuario.lugarNacimiento??>
+        <li>${usuario.nacimientoFecha}</li>
+        <li>${usuario.lugarNacimiento}</li>
+        <li>${usuario.lugarResidencia}</li>
+        <li>${usuario.lugarTrabajo}</li>
+        <li>${usuario.lugarEstudio}</li>
+    </#if>
+    <br>
+    <h3 class="text-left" href="">Amigos</h3>
+    <br>
+    <h3 class="text-left" href="">Albumes</h3>
+
+</ul>
     </p>
 </div>
 

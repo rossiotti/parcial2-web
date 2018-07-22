@@ -52,7 +52,7 @@
             var year = parseInt(parts[0], 10);
             var today = new Date();
             var minAge = today.getFullYear() - year;
-            alert(minAge);
+
             // Check the ranges of month and year
             if(minAge < 13 || year > today.getFullYear() || dateString.length > 10)
                 return true;
@@ -105,7 +105,7 @@
        </script>
     </#if>
     <#if invalid = 1>
-    <script>
+    <script type="text/javascript">
         alert("Este usuario ya existe")
         $(window).on('load',function(){
             $('#loginFormModal').modal('show');

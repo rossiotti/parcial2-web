@@ -18,6 +18,17 @@ public class UsuarioORM {
 
     }
 
+    public List<Usuario> listarUsuarios(int pagina,String text){
+
+        Query query = em.createQuery("select u from Usuario u where u.username like ?1 or u.nombre like ?1 or u.apellidos like ?1 or u.lugarEstudio like ?1" +
+                " or u.lugarNacimiento like ?1 or u.lugarResidencia like ?1 or u.lugarTrabajo like ?1")
+                .setParameter(1,"%"+text+"%")
+                .setFirstResult(5*(pagina-1))
+                .setMaxResults(5);
+
+        return (List<Usuario>)query.getResultList();
+    }
+
     public Long countUsuarios(){
         Long count = ((Number)em.createNativeQuery("select count(Usuario.id) from USUARIO").getSingleResult()).longValue();
         return count;
@@ -30,6 +41,15 @@ public class UsuarioORM {
         em.merge(u);
         em.getTransaction().commit();
         
+    }
+
+    public void agregarAmigo(Usuario usuario,Usuario amigo){
+        em.getTransaction().begin();
+        Usuario u = em.find(Usuario.class,usuario.getId());
+        u.getAmigos().add(amigo);
+        em.merge(u);
+        em.getTransaction().commit();
+
     }
 
     public void addPost(Usuario editar, Post post){
