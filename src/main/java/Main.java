@@ -1,17 +1,20 @@
+import ORM.ComentarioORM;
+import ORM.PostORM;
 import ORM.UsuarioORM;
+import clases.Comentario;
+import clases.Post;
 import clases.Usuario;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.jasypt.util.text.BasicTextEncryptor;
-import util.EmailValidator;
+import spark.Session;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.staticFiles;
+import static spark.Spark.*;
 
 public class Main {
 
@@ -22,15 +25,27 @@ public class Main {
         configuration.setClassForTemplateLoading(Main.class, "/");
 
         ORM.UsuarioORM usuarioORM = new UsuarioORM();
+        ORM.PostORM postORM = new PostORM();
+        ORM.ComentarioORM comentarioORM = new ComentarioORM();
 
         if(usuarioORM.countUsuarios() == 0){
             Usuario admin = new Usuario();
             admin.setUsername("admin");
             admin.setPassword("admin");
             admin.setAdmin(true);
+            admin.setMuro(new ArrayList<>());
+            admin.setNombre("admin");
+            admin.setApellidos("admin");
             usuarioORM.guardarUsuario(admin);
             System.out.println("Admin creado con exito.");
         }
+
+        before("/home", (request, response) -> {
+            Usuario usuario = request.session(true).attribute("usuario");
+            if (usuario == null) {
+                response.redirect("/");
+            }
+        });
 
         get("/", (req, res) -> {
 
@@ -40,12 +55,9 @@ public class Main {
                 textEncryptor.setPasswordCharArray("mangekyouSharingan42".toCharArray());
                 req.session(true);
                 req.session().attribute("usuario", usuarioORM.getUsuarioUsername(textEncryptor.decrypt(req.cookie("username"))));
-                //res.redirect("/");
-            }else if(usuario != null){
-                res.redirect("/home");
             }
-
             res.redirect("/inicio");
+
             return "";
         });
 
@@ -53,6 +65,9 @@ public class Main {
         get("/inicio", (req, res) -> {
 
             Usuario usuario = req.session(true).attribute("usuario");
+            if(usuario!=null){
+                res.redirect("/home");
+            }
             StringWriter writer = new StringWriter();
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/home.ftl");
@@ -71,7 +86,6 @@ public class Main {
             StringWriter writer = new StringWriter();
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/muro.ftl");
-
 
             atr.put("usuario",usuario);
             template.process(atr,writer);
@@ -103,6 +117,16 @@ public class Main {
 
         });
 
+        get("/logout", (req, res) -> {
+            StringWriter writer = new StringWriter();
+
+            Session ses = req.session(true);
+            ses.invalidate();
+            res.removeCookie("username");
+            res.redirect("/");
+            return writer;
+        });
+
 
         post("/registrar", (req, res) -> {
             String username = req.queryParams("username");
@@ -125,16 +149,61 @@ public class Main {
                 usuario.setNacimientoFecha(fechaNacimiento);
                 usuario.setEmail(email);
                 usuario.setApellidos(apellidos);
+                usuario.setMuro(new ArrayList<>());
 
-              //  usuarioORM.guardarUsuario(usuario);
+                usuarioORM.guardarUsuario(usuario);
                 req.session(true);
                 req.session().attribute("usuario", usuario);
-               // res.redirect("/home");
+                res.redirect("/home");
                 return "";
             }
 
 
             return "";
+        });
+
+        post("/crearPost", (req, res) -> {
+
+            Usuario usuario = req.session(true).attribute("usuario");
+            String texto = req.queryParams("texto");
+            Post post = new Post();
+            post.setTexto(texto);
+            post.setUsuario(usuario);
+            postORM.guardarPost(post);
+            usuarioORM.addPost(usuario,post);
+            res.redirect("/home");
+            return "";
+
+        });
+
+        post("/:id/comentar", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            Long idPost = Long.parseLong(req.params("id"));
+            String comentario = req.queryParams("comentario");
+
+            Comentario c = new Comentario();
+            c.setAutor(usuario);
+            c.setComentario(comentario);
+            comentarioORM.guardarComentario(c);
+            postORM.addComentario(postORM.getPost(idPost),c);
+            res.redirect("/home");
+            return null;
+        });
+
+        post("/updateInfo", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            String lugarNacimiento = req.queryParams("lugarNacimiento");
+            String lugarResidencia = req.queryParams("lugarResidencia");
+            String lugarTrabajo = req.queryParams("lugarTrabajo");
+            String lugarEstudio = req.queryParams("lugarEstudio");
+
+            usuario.setLugarEstudio(lugarEstudio);
+            usuario.setLugarNacimiento(lugarNacimiento);
+            usuario.setLugarResidencia(lugarResidencia);
+            usuario.setLugarTrabajo(lugarTrabajo);
+            usuarioORM.editarUsuario(usuario);
+            res.redirect("/home");
+            return null;
         });
     }
 }

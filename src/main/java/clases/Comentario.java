@@ -16,10 +16,9 @@ public class Comentario {
     private Usuario autor;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Post post;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     private Imagen imagen;
+
+
 
     public Long getId() {
         return id;
@@ -43,14 +42,6 @@ public class Comentario {
 
     public void setAutor(Usuario autor) {
         this.autor = autor;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
     }
 
     public Imagen getImagen() {

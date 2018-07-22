@@ -23,6 +23,10 @@ public class Usuario {
     private String lugarTrabajo;
 
     @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "Muro_Post", joinColumns = { @JoinColumn(name = "Id_usuarioMuro") }, inverseJoinColumns = { @JoinColumn(name = "Muro_ID_post") })
+    private List<Post> muro;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "Usuario_Amigos", joinColumns = { @JoinColumn(name = "Id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "LISTAusuarioAmigo_ID_usuarioAmigo") })
     private List<Usuario> amigos;
     private boolean admin;
@@ -133,5 +137,11 @@ public class Usuario {
         this.amigos = amigos;
     }
 
+    public List<Post> getMuro() {
+        return muro;
+    }
 
+    public void setMuro(List<Post> muro) {
+        this.muro = muro;
+    }
 }

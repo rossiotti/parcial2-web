@@ -16,6 +16,29 @@
     <script src="js/socialyte.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <#if !usuario.lugarNacimiento??>
+    <script type="text/javascript">
+        $(window).on('load',function(){
+            $('#InfoFormModal').modal('show');
+        });
+    </script>
+      <div>
+        <div class="modal fade" id="InfoFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm" >
+            <div class="mdl-card__supporting-text">
+                <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
+                    <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                        <h2>Queremos saber mas de usted.</h2>
+                        <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="textoMuro" placeholder="Donde nacio?">
+                        <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="textoMuro" placeholder="Donde estudia?">
+                        <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="textoMuro" placeholder="Donde vive?">
+                        <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="textoMuro" placeholder="Donde trabaja?">
+                    </div>
+                    <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Update<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+                </form>
+            </div>
+    </div>
+    </div>
+    </#if>
 </head>
 
 <body id="wall">
@@ -52,7 +75,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://socialyte.codeplus.it/wall.html#" title="Settings">
+                    <a href="/logout" title="Settings">
                         <div class="col-xs-4">
                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                         </div>
@@ -97,118 +120,74 @@
     <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
         <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
-    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">My User</a></h2>
+    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuario.username}</a></h2>
     <p class="text-center user-description hidden-xs">
         <i>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</i>
     </p>
 </div>
 
 <!--Wall with Post -->
+
 <div class="content-posts active" id="posts">
-    <div id="posts-container" class="container-fluid container-posts">
-
-        <div class="card-post">
-            <div class="row">
-                <div class="col-xs-3 col-sm-2">
-                    <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
-                        <img src="img/user.jpg" alt="User name" class="img-circle img-user">
-                    </a>
-                </div>
-                <div class="col-xs-9 col-sm-10 info-user">
-                    <h3><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">My User</a></h3>
-                    <p><i>2h</i></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2 data-post">
-                    <p>Lorem Ipsum Dolor si amet</p>
-                    <div class="reaction">
-                        <img draggable="false" class="emoji" alt="❤" src="./Wall Template_files/2764.png"> 156 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
+    <div>
+        <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#PostFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user"></i> Nuevo Post<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+        <div class="modal fade" id="PostFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm">
+            <div class="mdl-card__supporting-text">
+                <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
+                    <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                        <input class="mdl-textfield__input" type="text" name="texto" id="textoMuro" placeholder="Que piensas?">
                     </div>
-                    <div class="comments">
-                        <div class="more-comments">View more comments</div>
-                        <ul>
-                            <li><b>User1</b> Lorem Ipsum Dolor si amet</li>
-                            <li><b>User2</b> Lorem Ipsum Dolor si amet <img draggable="false" class="emoji" alt="😂" src="./Wall Template_files/1f602.png"></li>
-                        </ul>
-                        <form>
-                            <input type="text" class="form-control" placeholder="Add a comment">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-post">
-            <div class="row">
-                <div class="col-xs-3 col-sm-2">
-                    <a href="https://socialyte.codeplus.it/user-profile.html" title="User Profile">
-                        <img src="img/user2.jpg" alt="User name" class="img-circle img-user">
-                    </a>
-                </div>
-                <div class="col-xs-9 col-sm-10 info-user">
-                    <h3><a href="https://socialyte.codeplus.it/user-profile.html" title="User Profile">User Name</a></h3>
-                    <p><i>2h</i></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class=" col-sm-8 col-sm-offset-2 data-post">
-                    <p>Lorem Ipsum Dolor si amet</p>
-                    <img src="img/post.jpg" alt="image post" class="img-post">
-                    <div class="reaction">
-                        <img draggable="false" class="emoji" alt="❤" src="img/2764.png"> 1234 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
-                    </div>
-                    <div class="comments">
-                        <div class="more-comments">View more comments</div>
-                        <ul>
-                            <li><b>User1</b> Lorem Ipsum Dolor si amet</li>
-                            <li><b>User2</b> Lorem Ipsum Dolor si amet <img draggable="false" class="emoji" alt="😂" src="./Wall Template_files/1f602.png"></li>
-                        </ul>
-                        <form>
-                            <input type="text" class="form-control" placeholder="Add a comment">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-post">
-            <div class="row">
-                <div class="col-xs-3 col-sm-2">
-                    <a href="https://socialyte.codeplus.it/personal-profile.html" title="User Profile">
-                        <img src="img/user.jpg" alt="User name" class="img-circle img-user">
-                    </a>
-                </div>
-                <div class="col-xs-9 col-sm-10 info-user">
-                    <h3><a href="https://socialyte.codeplus.it/personal-profile.html" title="User Profile">My User</a></h3>
-                    <p><i>2h</i></p>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2 data-post">
-                    <p>Lorem Ipsum Dolor si amet</p>
-                    Video here
-                    <video controls="" __idm_id__="250006529">
-                        <source src="img/post-video.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="reaction">
-                        <img draggable="false" class="emoji" alt="❤" src="./Wall Template_files/2764.png"> 1234 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
-                    </div>
-                    <div class="comments">
-                        <div class="more-comments">View more comments</div>
-                        <ul>
-                            <li><b>User1</b> Lorem Ipsum Dolor si amet</li>
-                            <li><b>User2</b> Lorem Ipsum Dolor si amet <img draggable="false" class="emoji" alt="😂" src="./Wall Template_files/1f602.png"></li>
-                        </ul>
-                        <form>
-                            <input type="text" class="form-control" placeholder="Add a comment">
-                        </form>
-                    </div>
-                </div>
-            </div>
+                    <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Postear<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+                </form>
         </div>
     </div>
+
+    <div id="posts-container" class="container-fluid container-posts">
+
+        <#if usuario.muro??>
+
+          <#list usuario.muro as post>
+
+             <div class="card-post">
+                 <div class="row">
+                     <div class="col-xs-3 col-sm-2">
+                         <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
+                             <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                         </a>
+                     </div>
+                     <div class="col-xs-9 col-sm-10 info-user">
+                         <h3><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${post.usuario.nombre} ${post.usuario.apellidos}</a></h3>
+                         <p><i>2h</i></p>
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-sm-8 col-sm-offset-2 data-post">
+                         <p>${post.texto}</p>
+                         <div class="reaction">
+                             <img draggable="false" class="emoji" alt="❤" src="./Wall Template_files/2764.png"> 156 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
+                         </div>
+
+                         <div class="comments">
+                             <#if post.comentario??>
+                                <#list post.comentario as comentarios>
+                                   <ul>
+                                       <li><b>${comentarios.autor.nombre} ${comentarios.autor.nombre}</b> ${comentarios.comentario}</li>
+                                   </ul>
+                                </#list>
+                             </#if>
+                             <div class="more-comments">View more comments</div>
+                             <form action="/${post.id}/comentar" method="post">
+                                 <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
+                             </form>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+          </#list>
+
+        </#if>
+
     <!--Close #posts-container-->
     <div id="loading">
         <img src="img/load.gif" alt="loader">

@@ -95,14 +95,21 @@
 
     <#if invalid??>
     <#if invalid = 2>
-       <script>
-           alert("Este correo esta en uso")
+       <script type="text/javascript">
+           alert("Este correo esta en uso");
+
+                   $(window).on('load',function(){
+                       $('#loginFormModal').modal('show');
+                   });
            document.getElementById("singupEmail").style.color = 'red';
        </script>
     </#if>
     <#if invalid = 1>
     <script>
         alert("Este usuario ya existe")
+        $(window).on('load',function(){
+            $('#loginFormModal').modal('show');
+        });
         document.getElementById("singupUsername").style.color = 'red';
     </script>
     </#if>

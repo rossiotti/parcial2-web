@@ -1,5 +1,6 @@
 package ORM;
 
+import clases.Post;
 import clases.Usuario;
 
 import javax.persistence.*;
@@ -22,15 +23,22 @@ public class UsuarioORM {
         return count;
     }
 
-    public void editarUsuario(Usuario editar, String username, String password, boolean administrator){
+    public void editarUsuario(Usuario editar){
         em.getTransaction().begin();
         Usuario u = em.find(Usuario.class,editar.getId());
-        u.setUsername(username);
-        u.setPassword(password);
-        u.setAdmin(administrator);
+        u = editar;
         em.merge(u);
         em.getTransaction().commit();
         
+    }
+
+    public void addPost(Usuario editar, Post post){
+        em.getTransaction().begin();
+        Usuario u = em.find(Usuario.class,editar.getId());
+        u.getMuro().add(post);
+        em.merge(u);
+        em.getTransaction().commit();
+
     }
 
     public String dropUsuario(Long id){
