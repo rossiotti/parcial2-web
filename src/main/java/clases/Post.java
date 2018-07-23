@@ -1,6 +1,7 @@
 package clases;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -19,9 +20,14 @@ public class Post {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Comentario> comentario;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Reaccion> reaccions;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "Usuario_Post", joinColumns = { @JoinColumn(name = "Id_post") }, inverseJoinColumns = { @JoinColumn(name = "LISTAusuario_ID_usuario") })
     private List<Usuario> tagUsuarios;
+
+    private Timestamp tiempo;
 
     public Long getId() {
         return id;
@@ -61,5 +67,21 @@ public class Post {
 
     public void setComentario(List<Comentario> comentario) {
         this.comentario = comentario;
+    }
+
+    public Timestamp getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(Timestamp tiempo) {
+        this.tiempo = tiempo;
+    }
+
+    public List<Reaccion> getReaccions() {
+        return reaccions;
+    }
+
+    public void setReaccions(List<Reaccion> reaccions) {
+        this.reaccions = reaccions;
     }
 }

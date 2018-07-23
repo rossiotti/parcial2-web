@@ -1,8 +1,10 @@
 import ORM.ComentarioORM;
 import ORM.PostORM;
+import ORM.ReaccionORM;
 import ORM.UsuarioORM;
 import clases.Comentario;
 import clases.Post;
+import clases.Reaccion;
 import clases.Usuario;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -28,6 +30,7 @@ public class Main {
         ORM.UsuarioORM usuarioORM = new UsuarioORM();
         ORM.PostORM postORM = new PostORM();
         ORM.ComentarioORM comentarioORM = new ComentarioORM();
+        ORM.ReaccionORM reaccionORM = new ReaccionORM();
 
         if(usuarioORM.countUsuarios() == 0){
             Usuario admin = new Usuario();
@@ -179,11 +182,78 @@ public class Main {
             Post post = new Post();
             post.setTexto(texto);
             post.setUsuario(usuario);
+            post.setReaccions(new ArrayList<>());
             postORM.guardarPost(post);
             usuarioORM.addPost(usuario,post);
+            System.out.println(usuario.getMuro());
             res.redirect("/home");
             return "";
 
+        });
+
+        post("/post/:id/like", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            Long idPost = Long.parseLong(req.params("id"));
+
+            Reaccion reaccion = new Reaccion();
+            reaccion.setUsuario(usuario);
+            reaccion.setReaccion(true);
+            Post post = postORM.getPost(idPost);
+            for(int i = 0; i<usuario.getMuro().size(); i++){
+                if(idPost == usuario.getMuro().get(i).getId()){
+                    if( usuario.getMuro().get(i).getReaccions().size() == 0){
+                        usuario.getMuro().get(i).getReaccions().add(reaccion);
+                        reaccionORM.guardarLike(reaccion);
+                        postORM.addLike(post,reaccion);
+                    }else{
+                        for(int j = 0; j < post.getReaccions().size(); j ++){
+                            if(post.getReaccions().get(j).getUsuario().getId() != usuario.getId()){
+                                usuario.getMuro().get(i).getReaccions().add(reaccion);
+                                reaccionORM.guardarLike(reaccion);
+                                postORM.addLike(post,reaccion);
+                            }else{
+                                postORM.updateLike(post,post.getReaccions().get(j));
+                                usuario.getMuro().get(i).getReaccions().remove(j);
+                            }
+                        }
+                    }
+                }
+            }
+            res.redirect("/home");
+            return "";
+            });
+
+        post("/post/:id/dislike", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            Long idPost = Long.parseLong(req.params("id"));
+
+            Reaccion reaccion = new Reaccion();
+            reaccion.setUsuario(usuario);
+            reaccion.setReaccion(false);
+            Post post = postORM.getPost(idPost);
+            for(int i = 0; i<usuario.getMuro().size(); i++){
+                if(idPost == usuario.getMuro().get(i).getId()){
+                    if( usuario.getMuro().get(i).getReaccions().size() == 0){
+                        usuario.getMuro().get(i).getReaccions().add(reaccion);
+                        reaccionORM.guardarLike(reaccion);
+                        postORM.addLike(post,reaccion);
+                    }else{
+                        for(int j = 0; j < post.getReaccions().size(); j ++){
+                            if(post.getReaccions().get(j).getUsuario().getId() != usuario.getId()){
+                                usuario.getMuro().get(i).getReaccions().add(reaccion);
+                                reaccionORM.guardarLike(reaccion);
+                                postORM.addLike(post,reaccion);
+                            }else{
+                                postORM.updateLike(post,post.getReaccions().get(j));
+                                usuario.getMuro().get(i).getReaccions().remove(j);
+
+                            }
+                        }
+                    }
+                }
+            }
+            res.redirect("/home");
+            return "";
         });
 
         get("/buscarPersonas", (req, res) -> {
@@ -214,6 +284,38 @@ public class Main {
             atr.put("siguiente", (pagina + 1));
             atr.put("resultados",filtrados);
             atr.put("usuario",usuario);
+            atr.put("listaAmigos",usuario.getAmigos());
+            template.process(atr,writer);
+            return writer;
+        });
+
+
+        get("/listaAmigos", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/friendList.ftl");
+            int pagina = Integer.parseInt(req.queryParams("pagina"));
+            int maxPagina = (int) Math.ceil(usuario.getAmigos().size() / 5);
+            atr.put("pagina", pagina);
+
+            if(pagina >= maxPagina){
+                atr.put("valorSiguiente", 0);
+            }else{
+                atr.put("valorSiguiente", 1);
+            }
+
+            if(pagina <= 1){
+                atr.put("valorAnterior", 0);
+                System.out.println(pagina);
+            }else{
+                atr.put("valorAnterior", 1);
+            }
+
+            atr.put("anterior", (pagina - 1));
+            atr.put("siguiente", (pagina + 1));
+            atr.put("usuario",usuario);
+            atr.put("listaAmigos",usuario.getAmigos());
             template.process(atr,writer);
             return writer;
         });
@@ -226,8 +328,14 @@ public class Main {
             Comentario c = new Comentario();
             c.setAutor(usuario);
             c.setComentario(comentario);
+            for(int i = 0; i<usuario.getMuro().size(); i++){
+                if(idPost == usuario.getMuro().get(i).getId())
+                    usuario.getMuro().get(i).getComentario().add(c);
+            }
+
             comentarioORM.guardarComentario(c);
             postORM.addComentario(postORM.getPost(idPost),c);
+            System.out.println(postORM.getPost(idPost).getComentario());
             res.redirect("/home");
             return null;
         });

@@ -21,12 +21,13 @@ public class Usuario {
     private String lugarResidencia;
     private String lugarEstudio;
     private String lugarTrabajo;
+    private boolean visible;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Muro_Post", joinColumns = { @JoinColumn(name = "Id_usuarioMuro") }, inverseJoinColumns = { @JoinColumn(name = "Muro_ID_post") })
     private List<Post> muro;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Usuario_Amigos", joinColumns = { @JoinColumn(name = "Id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "LISTAusuarioAmigo_ID_usuarioAmigo") })
     private List<Usuario> amigos;
     private boolean admin;
@@ -143,5 +144,13 @@ public class Usuario {
 
     public void setMuro(List<Post> muro) {
         this.muro = muro;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

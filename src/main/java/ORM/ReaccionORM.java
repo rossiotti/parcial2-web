@@ -1,9 +1,12 @@
 package ORM;
 
+import clases.Post;
 import clases.Reaccion;
 import clases.Usuario;
+import javafx.geometry.Pos;
 
 import javax.persistence.*;
+import java.util.List;
 
 public class ReaccionORM {
 
@@ -17,20 +20,18 @@ public class ReaccionORM {
 
     }
 
-    /*public Reaccion checkLike(Usuario Usuario, Articulo Articulo){
-        try{
-            Query query = em.createQuery("select r from Reaccion r where r.articulo = ?1 AND r.usuario = ?2")
-                    .setParameter(1, Articulo)
-                    .setParameter(2, Usuario);
-            return (Reaccion)query.getSingleResult();
-        } catch(NoResultException e){
-            return null;
-        }
+
+    public List<Reaccion> getReacciones(Post post){
+
+        Query query = em.createQuery("select lr.reaccions from Post lr where lr.id = ?1")
+                .setParameter(1,post.getId());
+        return (List<Reaccion>)query.getResultList();
     }
 
     public void deleteLike(Reaccion r){
         em.getTransaction().begin();
-        em.remove(r);
+        Reaccion re = em.find(Reaccion.class,r.getId());
+        em.remove(re);
         em.getTransaction().commit();
     }
 
@@ -41,5 +42,5 @@ public class ReaccionORM {
         em.getTransaction().commit();
     }
 
-*/
+
 }

@@ -2,6 +2,7 @@ package ORM;
 
 import clases.Comentario;
 import clases.Post;
+import clases.Reaccion;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -23,12 +24,30 @@ public class PostORM {
     public void addComentario(Post p, Comentario comentario){
         em.getTransaction().begin();
         Post po = em.find(Post.class,p.getId());
-        System.out.println(po.getTexto());
-
         if(po.getComentario()==null)
             po.setComentario(new ArrayList<>());
-
         po.getComentario().add(comentario);
+        em.merge(po);
+        em.getTransaction().commit();
+    }
+
+    public void addLike(Post p, Reaccion reaccion){
+        em.getTransaction().begin();
+        Post po = em.find(Post.class,p.getId());
+        if(po.getReaccions()==null)
+            po.setComentario(new ArrayList<>());
+
+        po.getReaccions().add(reaccion);
+        em.merge(po);
+        em.getTransaction().commit();
+    }
+
+    public void updateLike(Post p, Reaccion reaccion){
+        em.getTransaction().begin();
+        Post po = em.find(Post.class,p.getId());
+        po.getReaccions().remove(reaccion);
+        Reaccion re = em.find(Reaccion.class,reaccion.getId());
+        em.remove(re);
         em.merge(po);
         em.getTransaction().commit();
     }
@@ -38,4 +57,8 @@ public class PostORM {
                 .setParameter("id", id);
         return (Post) query.getSingleResult();
     }
+
+
+
+
 }

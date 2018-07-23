@@ -18,7 +18,7 @@ public class Imagen {
     @OneToOne
     private Usuario posteador;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Usuario_Imagen", joinColumns = { @JoinColumn(name = "Id_Imagen") }, inverseJoinColumns = { @JoinColumn(name = "LISTAusuario_ID_usuario") })
     private List<Usuario> imagenTags;
 

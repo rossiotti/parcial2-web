@@ -13,7 +13,7 @@ public class Album {
 
     private String titulo;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "IMAGEN_ALBUM", joinColumns = { @JoinColumn(name = "ID_Album") }, inverseJoinColumns = { @JoinColumn(name = "Listaimagen_Id_Imagen") })
     private List<Imagen> imagenList;
 

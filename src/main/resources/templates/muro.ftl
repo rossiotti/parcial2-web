@@ -15,10 +15,19 @@
     <script src="js/socialyte.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
+
+
+    <script>
+        function reCom(){
+            location.reload(true);
+        }
+
+
+    </script>
     <#if !usuario.lugarNacimiento??>
     <script type="text/javascript">
         $(window).on('load',function(){
-            $('#InfoFormModal').modal({backdrop: 'static', keyboard: false, modal('show')} );
+            $('#InfoFormModal').modal({backdrop: 'static', keyboard: false, }, 'show');
         });
     </script>
       <div>
@@ -27,10 +36,10 @@
                 <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
                     <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
                         <h2>Queremos saber mas de usted.</h2>
-                        <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="textoMuro" placeholder="Donde nacio?">
-                        <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="textoMuro" placeholder="Donde estudia?">
-                        <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="textoMuro" placeholder="Donde vive?">
-                        <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="textoMuro" placeholder="Donde trabaja?">
+                        <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="infoLugarNacimiento" placeholder="Donde nacio?"required="required">
+                        <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="infoLugarEstudio" placeholder="Donde estudia?" required="required">
+                        <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="infoLugarResidencia" placeholder="Donde vive?" required="required">
+                        <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="infoLugarTrabajo" placeholder="Donde trabaja?" required="required">
                     </div>
                     <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Update<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
                 </form>
@@ -55,7 +64,7 @@
                 </span>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownSettings">
                 <li>
-                    <a href="https://socialyte.codeplus.it/settings.html" title="Settings" data-toggle="modal" data-target="#settingsmodal">
+                    <a href="#" title="Settings" data-toggle="modal" data-target="#settingsFormModal">
                         <div class="col-xs-4">
                             <i class="fa fa-wrench" aria-hidden="true"></i>
                         </div>
@@ -131,7 +140,10 @@
         <li>${usuario.lugarEstudio}</li>
     </#if>
     <br>
-    <h3 class="text-left" href="">Amigos</h3>
+    <form name="submitForm" method="get" action="/listaAmigos">
+        <input type="hidden" name="pagina" value="1">
+        <a class="text-left" HREF="javascript:document.submitForm.submit()">Amigos</a>
+    </form>
     <br>
     <h3 class="text-left" href="">Albumes</h3>
 
@@ -176,20 +188,37 @@
                  <div class="row">
                      <div class="col-sm-8 col-sm-offset-2 data-post">
                          <p>${post.texto}</p>
+                         <h1>${post.reaccions?size}</h1>
                          <div class="reaction">
-                             <img draggable="false" class="emoji" alt="❤" src="./Wall Template_files/2764.png"> 156 <img draggable="false" class="emoji" alt="😃" src="./Wall Template_files/1f603.png"> 54
+                             <#assign countLikes = 0>
+                             <#assign countDislikes = 0>
+                            <#if post.reaccions??>
+                               <#list post.reaccions as likes>
+                                <#if likes.reaccion == true>
+                                <#assign countLikes = countLikes + 1>
+                                <#else>
+                                <#assign countDislikes = countDislikes + 1>
+                                </#if>
+                               </#list>
+                            </#if>
+                             <form action="/post/${post.id}/like" method="post">
+                                 <button type="submit">${countLikes} Like</button>
+                             </form>
+                             <form action="/post/${post.id}/dislike" method="post">
+                                 <button>${countDislikes} Dislike</button>
+                             </form>
                          </div>
 
                          <div class="comments">
                              <#if post.comentario??>
                                 <#list post.comentario as comentarios>
                                    <ul>
-                                       <li><b>${comentarios.autor.nombre} ${comentarios.autor.nombre}</b> ${comentarios.comentario}</li>
+                                       <li><b>${comentarios.autor.nombre} ${comentarios.autor.apellidos}</b> ${comentarios.comentario}</li>
                                    </ul>
                                 </#list>
                              </#if>
                              <div class="more-comments">View more comments</div>
-                             <form action="/${post.id}/comentar" method="post">
+                             <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">
                                  <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
                              </form>
                          </div>
@@ -207,7 +236,83 @@
     </div>
 </div>
 <!-- Close #posts -->
-<!-- Modal container for settings--->
+
+        <!-- Subscribe Form Start -->
+        <div class="modal fade" id="settingsFormModal" tabindex="-1" role="dialog" aria-labelledby="settingsFormModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">General Settings</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row modal-row">
+                            <div class="col-sm-3">
+                                <label>User name: </label>
+                            </div>
+                            <div class="col-sm-6">
+                            ${usuario.username}
+                            </div>
+                            <div class="col-sm-3">
+                                <a href="#" title="Edit Username"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                            </div>
+                        </div>
+                        <div class="row modal-row">
+                            <div class="col-sm-3">
+                                <p>
+                                    <label>Email: </label>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>
+                                    example@email.com
+                                </p>
+                            </div>
+                            <div class="col-sm-3">
+                                <p>
+                                    <a href="#" title="Edit Email"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row modal-row">
+                            <div class="col-sm-3">
+                                <p>
+                                    <label>Change password: </label>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>*********</p>
+                            </div>
+                            <div class="col-sm-3">
+                                <a href="#" title="Edit Password"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                            </div>
+                        </div>
+                        <div class="row modal-row">
+                            <div class="col-sm-3">
+                                <p>
+                                    <label>Public profile: </label>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>
+                                    <input class="switch-checkbox" type="checkbox" name="PublicProfile" data-on-text="Yes" data-off-text="No" checked>
+                                </p>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-social">Save changes</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Subscribe Form End -->
+
+        <!-- Modal container for settings--->
 <div id="settingsmodal" class="modal fade text-center">
     <div class="modal-dialog">
         <div class="modal-content">

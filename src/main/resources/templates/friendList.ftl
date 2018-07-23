@@ -137,32 +137,11 @@
 
 <!-- Friend List ================================================= -->
 <div CLASS="content-posts active">
-           <#if resultados??>
-           <#list resultados as res>
+           <#if listaAmigos?size &gt; 0>
+           <#list listaAmigos as res>
 
                <div class="container">
                    <#if res.id != usuario.id>
-                   <#if listaAmigos?size == 0>
-                   <form action="/agregarAmigo" method="post">
-                       <input name="id" value="${res.id}" type="hidden" placeholder="Search..">
-                       <button type="submit">Agregar Amigo</button>
-                   </form>
-                   <#else>
-                   <#list listaAmigos as a>
-                   <#if a.id == res.id>
-                    <a class="text-success">Amigos</a>
-                   <#break>
-                   <#else>
-                    <form action="/agregarAmigo" method="post">
-                        <input name="id" value="${res.id}" type="hidden" placeholder="Search..">
-                        <button type="submit">Agregar Amigo</button>
-                    </form>
-                    <#break>
-                   </#if>
-                     </#list>
-                   </#if>
-
-
                        <h5><a href="https://thunder-team.com/friend-finder/timeline.html" >${res.nombre} ${res.apellidos}</a></h5>
                  <#if res.lugarTrabajo??>
                       <p>${res.lugarTrabajo}</p>
@@ -179,11 +158,12 @@
 
                    </#if>
 
-               </div>
-           </#list>
-           <#else>
-           <h2 class="text-center">La busqueda no produjo resultados</h2>
+                 </div>
+                 </#list>
            </#if>
+     <#if listaAmigos?size == 0>
+             <h1>No tiene amigos. BingoBook es mejor con amigos!</h1>
+     </#if>
 
 </div>
 </body>

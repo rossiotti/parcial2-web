@@ -39,11 +39,7 @@ public class ComentarioORM {
         em.getTransaction().commit();
         
     }
-/*
-    public List<Comentario> getComentario(Long idArticulo){
-        Query query = em.createQuery("select c from Comentario c where articulo.id = ?1")
-                .setParameter(1,idArticulo);
-        return (List<Comentario>)query.getResultList();
-    }
-*/
+
+
+
 }

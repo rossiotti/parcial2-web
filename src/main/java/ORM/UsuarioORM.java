@@ -20,12 +20,38 @@ public class UsuarioORM {
 
     public List<Usuario> listarUsuarios(int pagina,String text){
 
-        Query query = em.createQuery("select u from Usuario u where u.username like ?1 or u.nombre like ?1 or u.apellidos like ?1 or u.lugarEstudio like ?1" +
-                " or u.lugarNacimiento like ?1 or u.lugarResidencia like ?1 or u.lugarTrabajo like ?1")
-                .setParameter(1,"%"+text+"%")
+        try{
+            Query query = em.createQuery("select u from Usuario u where u.username like ?1 or u.nombre like ?1 or u.apellidos like ?1 or u.lugarEstudio like ?1" +
+                    " or u.lugarNacimiento like ?1 or u.lugarResidencia like ?1 or u.lugarTrabajo like ?1")
+                    .setParameter(1,"%"+text+"%")
+                    .setFirstResult(5*(pagina-1))
+                    .setMaxResults(5);
+
+            return (List<Usuario>)query.getResultList();
+        }catch (NoResultException e){
+            return null;
+        }
+
+    }
+
+    public List<Usuario> sugerirAmigos(String text){
+        try{
+            Query query = em.createQuery("select u from Usuario u where u.username = ?1 or u.nombre = ?1 or u.apellidos = ?1 or u.lugarEstudio = ?1" +
+                    " or u.lugarNacimiento = ?1 or u.lugarResidencia = ?1 or u.lugarTrabajo = ?1")
+                    .setParameter(1,text);
+
+            return (List<Usuario>)query.getResultList();
+        }catch (NoResultException e){
+            return null;
+        }
+
+    }
+
+    public List<Usuario> listarAmigos(int pagina){
+
+        Query query = em.createQuery("select u from Usuario u")
                 .setFirstResult(5*(pagina-1))
                 .setMaxResults(5);
-
         return (List<Usuario>)query.getResultList();
     }
 
@@ -60,6 +86,8 @@ public class UsuarioORM {
         em.getTransaction().commit();
 
     }
+
+
 
     public String dropUsuario(Long id){
         Usuario u = em.find(Usuario.class,id);
