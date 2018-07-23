@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Resultados</title>
+    <title>Perfil de ${usuarioP.nombre} ${usuarioP.apellidos}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -15,30 +15,6 @@
     <script src="js/socialyte.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
-
-    <#if !usuario.lugarNacimiento??>
-    <script type="text/javascript">
-        $(window).on('load',function(){
-            $('#InfoFormModal').modal({backdrop: 'static', keyboard: false, }, 'show');
-        });
-    </script>
-      <div>
-          <div class="modal fade" id="InfoFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm" >
-              <div class="mdl-card__supporting-text">
-                  <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
-                      <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                          <h2>Queremos saber mas de usted.</h2>
-                          <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="infoLugarNacimiento" placeholder="Donde nacio?"required="required">
-                          <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="infoLugarEstudio" placeholder="Donde estudia?" required="required">
-                          <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="infoLugarResidencia" placeholder="Donde vive?" required="required">
-                          <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="infoLugarTrabajo" placeholder="Donde trabaja?" required="required">
-                      </div>
-                      <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Update<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
-                  </form>
-              </div>
-          </div>
-      </div>
-    </#if>
 </head>
 
 <body id="wall">
@@ -111,7 +87,7 @@
             </span>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="https://socialyte.codeplus.it/wall.html" title="Wall"><span class="hidden-xs hidden-sm">Wall</span> <i class="fa fa-database" aria-hidden="true"></i></a>
+            <span><a href="/perfil?user=${usuario.username}" title="Wall"><span class="hidden-xs hidden-sm">Muro</span> <i class="fa fa-database" aria-hidden="true"></i></a>
             </span>
     </div>
 </header>
@@ -121,15 +97,15 @@
     <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
         <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
-    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuario.nombre} ${usuario.apellidos}</a></h2>
+    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuarioP.nombre} ${usuarioP.apellidos}</a></h2>
     <p class="text-center user-description hidden-xs">
     <ul>
-    <#if usuario.lugarNacimiento??>
-        <li>${usuario.nacimientoFecha}</li>
-        <li>${usuario.lugarNacimiento}</li>
-        <li>${usuario.lugarResidencia}</li>
-        <li>${usuario.lugarTrabajo}</li>
-        <li>${usuario.lugarEstudio}</li>
+    <#if usuarioP.lugarNacimiento??>
+        <li>${usuarioP.nacimientoFecha}</li>
+        <li>${usuarioP.lugarNacimiento}</li>
+        <li>${usuarioP.lugarResidencia}</li>
+        <li>${usuarioP.lugarTrabajo}</li>
+        <li>${usuarioP.lugarEstudio}</li>
     </#if>
         <br>
     <form name="submitForm" method="get" action="/listaAmigos">
@@ -161,9 +137,9 @@
 
         <div id="posts-container" class="container-fluid container-posts">
 
-        <#if usuario.muro??>
+        <#if usuarioP.muro??>
 
-        <#list usuario.muro as post>
+        <#list muroP as post>
 
              <div class="card-post">
                  <div class="row">
@@ -173,14 +149,13 @@
                          </a>
                      </div>
                      <div class="col-xs-9 col-sm-10 info-user">
-                         <form name="submitForm" method="get" action="/perfil">
-                             <button name="user" value="${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</button>
-                         </form>
-                         <p><i>2h</i></p>
+                         <strong><a href="/perfil?user=${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</a></strong>
+                         <p><i>${post.tiempo}</i></p>
                      </div>
                  </div>
                  <div class="row">
                      <div class="col-sm-8 col-sm-offset-2 data-post">
+                         <p>${post.texto}</p>
                          <div class="reaction">
                              <#assign countLikes = 0>
                              <#assign countDislikes = 0>

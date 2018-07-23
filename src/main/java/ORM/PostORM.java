@@ -3,12 +3,14 @@ package ORM;
 import clases.Comentario;
 import clases.Post;
 import clases.Reaccion;
+import clases.Usuario;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PostORM {
 
@@ -50,6 +52,13 @@ public class PostORM {
         em.remove(re);
         em.merge(po);
         em.getTransaction().commit();
+    }
+
+    public List<Post> getMuro(Usuario usuario){
+
+        Query query = em.createQuery("select p from Post p where p.usuario.id = ?1 order by p.tiempo desc")
+                .setParameter(1,usuario.getId());
+        return (List<Post>)query.getResultList();
     }
 
     public Post getPost(Long id){

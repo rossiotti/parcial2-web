@@ -12,17 +12,17 @@ import org.jasypt.util.text.BasicTextEncryptor;
 import spark.Session;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.*;
 
 import static spark.Spark.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
+        org.h2.tools.Server.createTcpServer().start();
         staticFiles.location("/templates");
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setClassForTemplateLoading(Main.class, "/");
@@ -100,24 +100,15 @@ public class Main {
 
 
             if(usuario.getAmigos() != null){
-                for(int j = 0; j<usuario.getMuro().size(); j++){
-                    for(Usuario amigo : usuario.getAmigos()){
-                        if(amigo.getMuro() != null){
-                            for(int i = 0; i<amigo.getMuro().size(); i++){
-                                if(usuario.getMuro().size() == 0){
-                                    usuario.getMuro().add(amigo.getMuro().get(i));
-                                }
-                                if(amigo.getMuro().get(i) != usuario.getMuro().get(j))
-                                    usuario.getMuro().add(amigo.getMuro().get(i));
-                            }
-                        }
-                    }
-                }
+                for(int i = 0; i < usuario.getAmigos().size(); i++)
+                smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
+
             }
-
-
+            List<Post> muro = usuario.getMuro();
+            Collections.reverse(usuario.getMuro());
 
             atr.put("usuario",usuario);
+            atr.put("muro",muro);
             template.process(atr,writer);
             return writer;
         });
@@ -202,6 +193,11 @@ public class Main {
             post.setTexto(texto);
             post.setUsuario(usuario);
             post.setReaccions(new ArrayList<>());
+            Date date= new Date();
+
+            long time = date.getTime();
+            Timestamp ts = new Timestamp(time);
+            post.setTiempo(ts);
             postORM.guardarPost(post);
             usuarioORM.addPost(usuario,post);
             System.out.println(usuario.getMuro());
@@ -317,12 +313,11 @@ public class Main {
             Template template = configuration.getTemplate("templates/perfil.ftl");
             String username = req.queryParams("user");
             Usuario uNuevo = usuarioORM.getUsuarioUsername(username);
-
-            if(uNuevo!=usuario){
-                atr.put("usuario",uNuevo);
-            }else{
-                atr.put("usuario",usuario);
-            }
+            List<Post> uMuro = uNuevo.getMuro();
+            Collections.reverse(uMuro);
+            atr.put("usuarioP",uNuevo);
+            atr.put("muroP",uMuro);
+            atr.put("usuario",usuario);
             template.process(atr,writer);
             return writer;
         });
@@ -411,5 +406,13 @@ public class Main {
             return "";
 
         });
+    }
+
+    public static void smartCombine(List<Post> first, List<Post> second) {
+        for(Post num : second) {
+            if(!first.contains(num)) {
+                first.add(num);
+            }
+        }
     }
 }

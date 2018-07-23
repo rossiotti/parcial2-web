@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Resultados</title>
+    <title>Perfil de ${usuario.nombre} ${usuario.apellidos}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -111,8 +111,11 @@
             </span>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="https://socialyte.codeplus.it/wall.html" title="Wall"><span class="hidden-xs hidden-sm">Wall</span> <i class="fa fa-database" aria-hidden="true"></i></a>
+        <form>
+            <span><a href="/perfil?user=${usuario.username}" title="Wall"><span class="hidden-xs hidden-sm">Muro</span> <i class="fa fa-database" aria-hidden="true"></i></a>
             </span>
+        </form>
+
     </div>
 </header>
 
@@ -163,7 +166,7 @@
 
         <#if usuario.muro??>
 
-          <#list usuario.muro as post>
+          <#list muro as post>
 
              <div class="card-post">
                  <div class="row">
@@ -175,13 +178,14 @@
                      <div class="col-xs-9 col-sm-10 info-user">
 
                          <form name="submitForm" method="get" action="/perfil">
-                             <button name="user" value="${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</button>
+                           <strong><a href="/perfil?user=${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</a></strong>
                          </form>
-                         <p><i>2h</i></p>
+                         <p><i>${post.tiempo}</i></p>
                      </div>
                  </div>
                  <div class="row">
                      <div class="col-sm-8 col-sm-offset-2 data-post">
+                         <p>${post.texto}</p>
                          <div class="reaction">
                              <#assign countLikes = 0>
                              <#assign countDislikes = 0>
@@ -198,7 +202,7 @@
                                  <button type="submit">${countLikes} Like</button>
                              </form>
                              <form action="/post/${post.id}/dislike" method="post">
-                                 <button>${countDislikes} Dislike</button>
+                                 <button type="submit">${countDislikes} Dislike</button>
                              </form>
                          </div>
 
