@@ -73,7 +73,10 @@ public class UsuarioORM {
         em.getTransaction().begin();
         Usuario u = em.find(Usuario.class,usuario.getId());
         u.getAmigos().add(amigo);
+        Usuario a = em.find(Usuario.class,amigo.getId());
+        a.getAmigos().add(usuario);
         em.merge(u);
+        em.merge(a);
         em.getTransaction().commit();
 
     }

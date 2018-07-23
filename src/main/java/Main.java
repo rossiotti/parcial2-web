@@ -98,6 +98,25 @@ public class Main {
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/muro.ftl");
 
+
+            if(usuario.getAmigos() != null){
+                for(int j = 0; j<usuario.getMuro().size(); j++){
+                    for(Usuario amigo : usuario.getAmigos()){
+                        if(amigo.getMuro() != null){
+                            for(int i = 0; i<amigo.getMuro().size(); i++){
+                                if(usuario.getMuro().size() == 0){
+                                    usuario.getMuro().add(amigo.getMuro().get(i));
+                                }
+                                if(amigo.getMuro().get(i) != usuario.getMuro().get(j))
+                                    usuario.getMuro().add(amigo.getMuro().get(i));
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
             atr.put("usuario",usuario);
             template.process(atr,writer);
             return writer;
@@ -289,6 +308,24 @@ public class Main {
             return writer;
         });
 
+
+
+        get("/perfil", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/perfil.ftl");
+            String username = req.queryParams("user");
+            Usuario uNuevo = usuarioORM.getUsuarioUsername(username);
+
+            if(uNuevo!=usuario){
+                atr.put("usuario",uNuevo);
+            }else{
+                atr.put("usuario",usuario);
+            }
+            template.process(atr,writer);
+            return writer;
+        });
 
         get("/listaAmigos", (req, res) -> {
             Usuario usuario = req.session(true).attribute("usuario");

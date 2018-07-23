@@ -23,21 +23,21 @@
         });
     </script>
       <div>
-        <div class="modal fade" id="InfoFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm" >
-            <div class="mdl-card__supporting-text">
-                <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
-                    <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                        <h2>Queremos saber mas de usted.</h2>
-                        <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="infoLugarNacimiento" placeholder="Donde nacio?"required="required">
-                        <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="infoLugarEstudio" placeholder="Donde estudia?" required="required">
-                        <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="infoLugarResidencia" placeholder="Donde vive?" required="required">
-                        <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="infoLugarTrabajo" placeholder="Donde trabaja?" required="required">
-                    </div>
-                    <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Update<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
-                </form>
-            </div>
-    </div>
-    </div>
+          <div class="modal fade" id="InfoFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm" >
+              <div class="mdl-card__supporting-text">
+                  <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
+                      <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                          <h2>Queremos saber mas de usted.</h2>
+                          <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="infoLugarNacimiento" placeholder="Donde nacio?"required="required">
+                          <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="infoLugarEstudio" placeholder="Donde estudia?" required="required">
+                          <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="infoLugarResidencia" placeholder="Donde vive?" required="required">
+                          <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="infoLugarTrabajo" placeholder="Donde trabaja?" required="required">
+                      </div>
+                      <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Update<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+                  </form>
+              </div>
+          </div>
+      </div>
     </#if>
 </head>
 
@@ -132,10 +132,10 @@
         <li>${usuario.lugarEstudio}</li>
     </#if>
         <br>
-        <form name="submitForm" method="get" action="/listaAmigos">
-            <input type="hidden" name="pagina" value="1">
-            <button class="text-left"type="submit">Ver Amigos</button>
-        </form>
+    <form name="submitForm" method="get" action="/listaAmigos">
+        <input type="hidden" name="pagina" value="1">
+        <button class="text-left"type="submit">Ver Amigos</button>
+    </form>
         <br>
         <h3 class="text-left" href="">Albumes</h3>
 
@@ -156,14 +156,14 @@
                     </div>
                     <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Postear<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
                 </form>
+            </div>
         </div>
-    </div>
 
-    <div id="posts-container" class="container-fluid container-posts">
+        <div id="posts-container" class="container-fluid container-posts">
 
         <#if usuario.muro??>
 
-          <#list usuario.muro as post>
+        <#list usuario.muro as post>
 
              <div class="card-post">
                  <div class="row">
@@ -173,7 +173,6 @@
                          </a>
                      </div>
                      <div class="col-xs-9 col-sm-10 info-user">
-
                          <form name="submitForm" method="get" action="/perfil">
                              <button name="user" value="${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</button>
                          </form>
@@ -186,13 +185,13 @@
                              <#assign countLikes = 0>
                              <#assign countDislikes = 0>
                             <#if post.reaccions??>
-                               <#list post.reaccions as likes>
-                                <#if likes.reaccion == true>
-                                <#assign countLikes = countLikes + 1>
-                                <#else>
-                                <#assign countDislikes = countDislikes + 1>
-                                </#if>
-                               </#list>
+                            <#list post.reaccions as likes>
+                            <#if likes.reaccion == true>
+                            <#assign countLikes = countLikes + 1>
+                            <#else>
+                            <#assign countDislikes = countDislikes + 1>
+                            </#if>
+                            </#list>
                             </#if>
                              <form action="/post/${post.id}/like" method="post">
                                  <button type="submit">${countLikes} Like</button>
@@ -204,14 +203,13 @@
 
                          <div class="comments">
                              <#if post.comentario??>
-                                <#list post.comentario as comentarios>
+                             <#list post.comentario as comentarios>
                                    <ul>
                                        <li><b>${comentarios.autor.nombre} ${comentarios.autor.apellidos}</b> ${comentarios.comentario}</li>
                                    </ul>
-                                </#list>
+                             </#list>
                              </#if>
-                             <div class="more-comments">View more comments</div>
-                             <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">
+                             <form action="/${post.id}/comentar" method="post">
                                  <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
                              </form>
                          </div>
@@ -219,16 +217,16 @@
                  </div>
              </div>
 
-          </#list>
+        </#list>
 
         </#if>
 
-    <!--Close #posts-container-->
-    <div id="loading">
-        <img src="img/load.gif" alt="loader">
-    </div>
-</div>
-<!-- Close #posts -->
+            <!--Close #posts-container-->
+            <div id="loading">
+                <img src="img/load.gif" alt="loader">
+            </div>
+        </div>
+        <!-- Close #posts -->
 
         <!-- Subscribe Form Start -->
         <div class="modal fade" id="settingsFormModal" tabindex="-1" role="dialog" aria-labelledby="settingsFormModal">
@@ -306,12 +304,12 @@
         <!-- Subscribe Form End -->
 
         <!-- Modal container for settings--->
-<div id="settingsmodal" class="modal fade text-center">
-    <div class="modal-dialog">
-        <div class="modal-content">
+        <div id="settingsmodal" class="modal fade text-center">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
 
 
