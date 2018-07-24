@@ -1,6 +1,7 @@
 package clases;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,7 @@ public class Imagen {
 
     private String titulo;
     private String descripcion;
-
+    private Timestamp tiempo;
 
     @OneToOne
     private Usuario posteador;
@@ -60,5 +61,13 @@ public class Imagen {
 
     public void setImagenTags(List<Usuario> imagenTags) {
         this.imagenTags = imagenTags;
+    }
+
+    public Timestamp getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(Timestamp tiempo) {
+        this.tiempo = tiempo;
     }
 }

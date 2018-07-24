@@ -1,6 +1,7 @@
 package clases;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 public class Comentario {
@@ -18,7 +19,7 @@ public class Comentario {
     @ManyToOne(fetch = FetchType.LAZY)
     private Imagen imagen;
 
-
+    private Timestamp tiempo;
 
     public Long getId() {
         return id;
@@ -50,5 +51,13 @@ public class Comentario {
 
     public void setImagen(Imagen imagen) {
         this.imagen = imagen;
+    }
+
+    public Timestamp getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(Timestamp tiempo) {
+        this.tiempo = tiempo;
     }
 }

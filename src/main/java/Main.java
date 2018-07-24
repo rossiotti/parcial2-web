@@ -131,8 +131,8 @@ public class Main {
                             textEncryptor.encrypt(username), (60*60*24*7), false, true);
                 }
                 res.redirect("/");
-            } else {
-                res.redirect("/login");
+            }else {
+                res.redirect("/inicio?invalid=3");
             }
             return "";
 
@@ -193,11 +193,8 @@ public class Main {
             post.setTexto(texto);
             post.setUsuario(usuario);
             post.setReaccions(new ArrayList<>());
-            Date date= new Date();
-
-            long time = date.getTime();
-            Timestamp ts = new Timestamp(time);
-            post.setTiempo(ts);
+            post.setTiempo(getFechaActual());
+            post.setReaccions(new ArrayList<>());
             postORM.guardarPost(post);
             usuarioORM.addPost(usuario,post);
             System.out.println(usuario.getMuro());
@@ -213,6 +210,7 @@ public class Main {
             Reaccion reaccion = new Reaccion();
             reaccion.setUsuario(usuario);
             reaccion.setReaccion(true);
+            reaccion.setTiempo(getFechaActual());
             Post post = postORM.getPost(idPost);
             for(int i = 0; i<usuario.getMuro().size(); i++){
                 if(idPost == usuario.getMuro().get(i).getId()){
@@ -245,6 +243,7 @@ public class Main {
             Reaccion reaccion = new Reaccion();
             reaccion.setUsuario(usuario);
             reaccion.setReaccion(false);
+            reaccion.setTiempo(getFechaActual());
             Post post = postORM.getPost(idPost);
             for(int i = 0; i<usuario.getMuro().size(); i++){
                 if(idPost == usuario.getMuro().get(i).getId()){
@@ -322,6 +321,16 @@ public class Main {
             return writer;
         });
 
+        get("/timeline", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/timeline.ftl");
+            template.process(atr,writer);
+            return writer;
+        });
+
+
         get("/listaAmigos", (req, res) -> {
             Usuario usuario = req.session(true).attribute("usuario");
             StringWriter writer = new StringWriter();
@@ -360,6 +369,7 @@ public class Main {
             Comentario c = new Comentario();
             c.setAutor(usuario);
             c.setComentario(comentario);
+            c.setTiempo(getFechaActual());
             for(int i = 0; i<usuario.getMuro().size(); i++){
                 if(idPost == usuario.getMuro().get(i).getId())
                     usuario.getMuro().get(i).getComentario().add(c);
@@ -414,5 +424,12 @@ public class Main {
                 first.add(num);
             }
         }
+    }
+
+    public static Timestamp getFechaActual(){
+        Date date= new Date();
+
+        long time = date.getTime();
+         return new Timestamp(time);
     }
 }

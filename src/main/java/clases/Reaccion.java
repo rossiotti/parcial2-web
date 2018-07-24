@@ -1,6 +1,7 @@
 package clases;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 public class Reaccion {
@@ -25,6 +26,8 @@ public class Reaccion {
     @ManyToOne
     @JoinColumn(name = "ID_Comentario")
     private Comentario comentario;
+
+    private Timestamp tiempo;
 
     private boolean reaccion;
 
@@ -74,5 +77,13 @@ public class Reaccion {
 
     public void setReaccion(boolean reaccion) {
         this.reaccion = reaccion;
+    }
+
+    public Timestamp getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(Timestamp tiempo) {
+        this.tiempo = tiempo;
     }
 }

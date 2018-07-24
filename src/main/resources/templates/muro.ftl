@@ -117,7 +117,7 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="/home" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-user" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">

@@ -1,6 +1,7 @@
 package clases;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,8 @@ public class Album {
 
     @OneToOne
     private Usuario creador;
+
+    private Timestamp tiempo;
 
 
     public Long getId() {
@@ -51,5 +54,13 @@ public class Album {
 
     public void setCreador(Usuario creador) {
         this.creador = creador;
+    }
+
+    public Timestamp getTiempo() {
+        return tiempo;
+    }
+
+    public void setTiempo(Timestamp tiempo) {
+        this.tiempo = tiempo;
     }
 }

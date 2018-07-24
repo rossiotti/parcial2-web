@@ -100,16 +100,28 @@
            alert("Este correo esta en uso");
 
                    $(window).on('load',function(){
-                       $('#loginFormModal').modal('show');
+                       $('#signupFormModal').modal('show');
                    });
            document.getElementById("singupEmail").style.color = 'red';
        </script>
     </#if>
+
+    <#if invalid = 3>
+       <script type="text/javascript">
+           alert("Usuario/Correo no encontrado.");
+
+           $(window).on('load',function(){
+               $('#loginFormModal').modal('show');
+           });
+           document.getElementById("singupEmail").style.color = 'red';
+       </script>
+    </#if>
+
     <#if invalid = 1>
     <script type="text/javascript">
         alert("Este usuario ya existe")
         $(window).on('load',function(){
-            $('#loginFormModal').modal('show');
+            $('#signupFormModal').modal('show');
         });
         document.getElementById("singupUsername").style.color = 'red';
     </script>
