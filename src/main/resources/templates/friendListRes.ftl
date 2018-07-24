@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)https://thunder-team.com/friend-finder/timeline-friends.html -->
-<html lang="en">
+<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Resultados</title>
+    <title>Perfil de ${usuario.nombre} ${usuario.apellidos}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
@@ -18,15 +17,7 @@
     <script src="js/socialyte.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="This is social network html5 template available in themeforest......">
-    <meta name="keywords" content="Social Network, Social Media, Make Friends, Newsfeed, Profile Page">
-    <meta name="robots" content="index, follow">
-    <title>My Friends | Friend Finder Friend List</title>
-
-    <!-- Stylesheets
-    ================================================= -->
-    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/buttons.css" type="text/css">
 
 
 </head>
@@ -46,7 +37,7 @@
                 </span>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownSettings">
                 <li>
-                    <a href="https://socialyte.codeplus.it/settings.html" title="Settings" data-toggle="modal" data-target="#settingsmodal">
+                    <a href="#" title="Settings" data-toggle="modal" data-target="#settingsFormModal">
                         <div class="col-xs-4">
                             <i class="fa fa-wrench" aria-hidden="true"></i>
                         </div>
@@ -68,7 +59,7 @@
                 <li>
                     <a href="/logout" title="Settings">
                         <div class="col-xs-4">
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
                         </div>
                         <div class="col-xs-8 text-left">
                             <span>Logout</span>
@@ -97,42 +88,76 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/home" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="/home" title="Muro"><span class="hidden-xs hidden-sm">Muro</span> <i class="fa fa-database" aria-hidden="true"></i></a>
+        <form>
+            <span><a href="/home" title="Home"><span class="hidden-xs hidden-sm">Home</span> <i aria-hidden="true"></i></a>
             </span>
+        </form>
+
     </div>
 </header>
 
 <!--Left Sidebar with info Profile -->
 <div class="sidebar-nav">
-    <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
+    <a href="/perfil?user=${usuario.username}" title="Profile">
         <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
-    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuario.nombre} ${usuario.apellidos}</a></h2>
-    <p class="text-center user-description hidden-xs">
-    <ul>
-    <#if usuario.lugarNacimiento??>
-        <li>${usuario.nacimientoFecha}</li>
-        <li>${usuario.lugarNacimiento}</li>
-        <li>${usuario.lugarResidencia}</li>
-        <li>${usuario.lugarTrabajo}</li>
-        <li>${usuario.lugarEstudio}</li>
-    </#if>
+    <h2 class="text-center hidden-xs"><a href="/perfil?user=${usuario.username}" title="Profile">${usuario.nombre} ${usuario.apellidos}</a></h2>
+    <div class="card card-primary">
+        <!-- /.card-header -->
         <br>
-    <form name="submitForm" method="get" action="/listaAmigos">
-        <input type="hidden" name="pagina" value="1">
-        <a class="text-left" HREF="javascript:document.submitForm.submit()">Amigos</a>
-    </form>
-        <br>
-        <h3 class="text-left" href="">Albumes</h3>
+             <#if usuario.lugarNacimiento??>
+            <div class="card-body">
+                <strong><i class="fa fa-book mr-1"></i> Education</strong>
 
-    </ul>
-    </p>
+                 <p class="text-muted">
+                     ${usuario.lugarEstudio}
+                 </p>
+
+                 <hr>
+
+                 <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
+
+                 <p class="text-muted">${usuario.lugarNacimiento}</p>
+
+                 <hr>
+
+                 <strong><i class="fa fa-briefcase"></i> Skills</strong>
+
+                 <p class="text-muted">
+                     ${usuario.lugarTrabajo}
+                 </p>
+
+                 <hr>
+
+                 <strong><i class="fa fa-building"></i> Residence</strong>
+
+                 <p class="text-muted">${usuario.lugarResidencia}</p>
+
+                 <hr>
+                 <strong><i class="fa fa-birthday-cake"></i> Born</strong>
+
+                 <p class="text-muted">${usuario.nacimientoFecha}</p>
+                 <hr>
+                 <br>
+             </#if>
+
+    </div>
+    </div>
+    <div class="pull-left">
+        <form name="submitForm" method="get" action="/listaAmigos">
+            <input type="hidden" name="pagina" value="1">
+            <button class="btn btn-primary" type="submit">Ver Amigos</button>
+        </form>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary">Albumes</button>
+    </div>
 </div>
-
+<!-- /.card-body -->
 
 
 <!-- Friend List ================================================= -->
@@ -140,46 +165,46 @@
            <#if resultados??>
            <#list resultados as res>
 
-               <div class="container">
-                   <#if res.id != usuario.id>
+
+ <div class="row">
+     <div class="shadow">
+         <div class="col-sm-12">
+             <div class="col-sm-2">
+                 <img src="https://www.infrascan.net/demo/assets/img/avatar5.png" class="img-circle" width="60px">
+             </div>
+             <div class="col-sm-8">
+                        <h1><a href="/perfil?user=${res.username}">${res.nombre} ${res.apellidos}</a></h1>
+               <#if res.id != usuario.id>
                    <#if listaAmigos?size == 0>
+               <div class="container">
+
                    <form action="/agregarAmigo" method="post">
                        <input name="id" value="${res.id}" type="hidden" placeholder="Search..">
-                       <button type="submit">Agregar Amigo</button>
+                       <button class="btn btn-primary" type="submit">Agregar Amigo</button>
                    </form>
                    <#else>
-                   <#list listaAmigos as a>
-                   <#if a.id == res.id>
-                    <a class="text-success">Amigos</a>
-                   <#break>
-                   <#else>
+                       <#list listaAmigos as a>
+                           <#if a.id == res.id>
+                    <h2><span class="label label-success">Amigos</span></h2>
+                               <#break>
+                           <#else>
                     <form action="/agregarAmigo" method="post">
                         <input name="id" value="${res.id}" type="hidden" placeholder="Search..">
-                        <button type="submit">Agregar Amigo</button>
+                        <button class="btn btn-primary" type="submit">Agregar Amigo</button>
                     </form>
-                    <#break>
+                               <#break>
+                           </#if>
+                       </#list>
                    </#if>
-                     </#list>
-                   </#if>
-
-
-                       <h5><a href="https://thunder-team.com/friend-finder/timeline.html" >${res.nombre} ${res.apellidos}</a></h5>
-                 <#if res.lugarTrabajo??>
-                      <p>${res.lugarTrabajo}</p>
-                 <#elseif res.lugarEstudio??>
-                      <p>${res.lugarEstudio}</p>
-                 <#elseif res.lugarNacimiento??>
-                      <p>${res.lugarNacimiento}</p>
-                 <#elseif res.lugarResidencia??>
-                      <p>${res.lugarResidencia}</p>
-                 <#else>
-                      <p>No provee informacion.</p>
-                 </#if>
-
-
-                   </#if>
-
-               </div>
+             </div>
+         </div>
+         <div class="clearfix"></div>
+         <hr />
+         </div>
+        </div>
+    </div>
+          </#if>
+ </div>
            </#list>
            <#else>
            <h2 class="text-center">La busqueda no produjo resultados</h2>

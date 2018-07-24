@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        org.h2.tools.Server.createTcpServer().start();
+        //org.h2.tools.Server.createTcpServer().start();
         staticFiles.location("/templates");
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setClassForTemplateLoading(Main.class, "/");

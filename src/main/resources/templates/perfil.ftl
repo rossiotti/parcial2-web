@@ -15,6 +15,8 @@
     <script src="js/socialyte.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/buttons.css" type="text/css">
+
 </head>
 
 <body id="wall">
@@ -54,7 +56,7 @@
                 <li>
                     <a href="/logout" title="Settings">
                         <div class="col-xs-4">
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
                         </div>
                         <div class="col-xs-8 text-left">
                             <span>Logout</span>
@@ -70,68 +72,117 @@
             </span>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNotification">
             <li class="new-not">
-                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user2.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+                <a href="#" title="User name comment"><img src="img/user2.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
             </li>
             <li class="new-not">
-                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user3.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+                <a href="#" title="User name comment"><img src="img/user3.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
             </li>
             <li>
-                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user4.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+                <a href="#" title="User name comment"><img src="img/user4.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
             </li>
             <li role="separator" class="divider"></li>
-            <li><a href="https://socialyte.codeplus.it/wall.html#" title="All notifications">All Notifications</a></li>
+            <li><a href="#" title="All notifications">All Notifications</a></li>
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/home" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="/perfil?user=${usuario.username}" title="Wall"><span class="hidden-xs hidden-sm">Muro</span> <i class="fa fa-database" aria-hidden="true"></i></a>
+        <form>
+            <span><a href="/home" title="Home"><span class="hidden-xs hidden-sm">Home</span> <i aria-hidden="true"></i></a>
             </span>
+        </form>
+
     </div>
 </header>
 
 <!--Left Sidebar with info Profile -->
 <div class="sidebar-nav">
-    <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
+    <a href="/perfil?user=${usuarioP.username}" title="Profile">
         <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
-    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuarioP.nombre} ${usuarioP.apellidos}</a></h2>
-    <p class="text-center user-description hidden-xs">
-    <ul>
-    <#if usuarioP.lugarNacimiento??>
-        <li>${usuarioP.nacimientoFecha}</li>
-        <li>${usuarioP.lugarNacimiento}</li>
-        <li>${usuarioP.lugarResidencia}</li>
-        <li>${usuarioP.lugarTrabajo}</li>
-        <li>${usuarioP.lugarEstudio}</li>
-    </#if>
+    <h2 class="text-center hidden-xs"><a href="/perfil?user=${usuarioP.username}" title="Profile">${usuarioP.nombre} ${usuarioP.apellidos}</a></h2>
+    <div class="card card-primary">
+        <!-- /.card-header -->
         <br>
-    <form name="submitForm" method="get" action="/listaAmigos">
-        <input type="hidden" name="pagina" value="1">
-        <button class="text-left"type="submit">Ver Amigos</button>
-    </form>
-        <br>
-        <h3 class="text-left" href="">Albumes</h3>
+             <#if usuarioP.lugarNacimiento??>
+            <div class="card-body">
+                <strong><i class="fa fa-book mr-1"></i> Education</strong>
 
-    </ul>
-    </p>
+                 <p class="text-muted">
+                     ${usuarioP.lugarEstudio}
+                 </p>
+
+                 <hr>
+
+                 <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
+
+                 <p class="text-muted">${usuarioP.lugarNacimiento}</p>
+
+                 <hr>
+
+                 <strong><i class="fa fa-briefcase"></i> Skills</strong>
+
+                 <p class="text-muted">
+                     ${usuarioP.lugarTrabajo}
+                 </p>
+
+                 <hr>
+
+                 <strong><i class="fa fa-building"></i> Residence</strong>
+
+                 <p class="text-muted">${usuarioP.lugarResidencia}</p>
+
+                 <hr>
+                 <strong><i class="fa fa-birthday-cake"></i> Born</strong>
+
+                 <p class="text-muted">${usuarioP.nacimientoFecha}</p>
+                 <hr>
+                 <br>
+             </#if>
+
+    </div>
+    </div>
+    <div class="pull-left">
+        <form name="submitForm" method="get" action="/listaAmigos">
+            <input type="hidden" name="pagina" value="1">
+            <button class="btn btn-primary" type="submit">Ver Amigos</button>
+        </form>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary">Albumes</button>
+    </div>
 </div>
+<!-- /.card-body -->
+
 
 <!--Wall with Post -->
 
 <div class="content-posts active" id="posts">
     <div>
-        <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#PostFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user"></i> Nuevo Post<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+        <button type="button" class="btn btn-primary btn-circle btn-xl" data-toggle="modal" data-target="#PostFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-plus"></i></button>
         <div class="modal fade" id="PostFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm">
-            <div class="mdl-card__supporting-text">
-                <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
-                    <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                        <input class="mdl-textfield__input" type="text" name="texto" id="textoMuro" placeholder="Que piensas?">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">Nuevo Post</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Postear<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
-                </form>
+                    <div class="modal-body">
+                        <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
+                            <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                                <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3"></textarea>                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-upgraded=",MaterialButton,MaterialRipple">Post</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -139,17 +190,20 @@
 
         <#if usuarioP.muro??>
 
-        <#list muroP as post>
+            <#list muroP as post>
 
              <div class="card-post">
                  <div class="row">
                      <div class="col-xs-3 col-sm-2">
-                         <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
+                         <a href="/perfil?user=${usuarioP.username}" title="Profile">
                              <img src="img/user.jpg" alt="User name" class="img-circle img-user">
                          </a>
                      </div>
                      <div class="col-xs-9 col-sm-10 info-user">
-                         <strong><a href="/perfil?user=${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</a></strong>
+
+                         <form name="submitForm" method="get" action="/perfil">
+                             <strong><a href="/perfil?user=${post.usuario.username}">${post.usuario.nombre} ${post.usuario.apellidos}</a></strong>
+                         </form>
                          <p><i>${post.tiempo}</i></p>
                      </div>
                  </div>
@@ -160,31 +214,32 @@
                              <#assign countLikes = 0>
                              <#assign countDislikes = 0>
                             <#if post.reaccions??>
-                            <#list post.reaccions as likes>
-                            <#if likes.reaccion == true>
-                            <#assign countLikes = countLikes + 1>
-                            <#else>
-                            <#assign countDislikes = countDislikes + 1>
+                                <#list post.reaccions as likes>
+                                    <#if likes.reaccion == true>
+                                        <#assign countLikes = countLikes + 1>
+                                    <#else>
+                                        <#assign countDislikes = countDislikes + 1>
+                                    </#if>
+                                </#list>
                             </#if>
-                            </#list>
-                            </#if>
-                             <form action="/post/${post.id}/like" method="post">
-                                 <button type="submit">${countLikes} Like</button>
+
+                             <form class="btn-group" action="/post/${post.id}/like" method="post">
+                                 <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
                              </form>
-                             <form action="/post/${post.id}/dislike" method="post">
-                                 <button>${countDislikes} Dislike</button>
+                             <form class="btn-group" action="/post/${post.id}/dislike" method="post">
+                                 <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
                              </form>
                          </div>
 
                          <div class="comments">
                              <#if post.comentario??>
-                             <#list post.comentario as comentarios>
+                                 <#list post.comentario as comentarios>
                                    <ul>
                                        <li><b>${comentarios.autor.nombre} ${comentarios.autor.apellidos}</b> ${comentarios.comentario}</li>
                                    </ul>
-                             </#list>
+                                 </#list>
                              </#if>
-                             <form action="/${post.id}/comentar" method="post">
+                             <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">
                                  <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
                              </form>
                          </div>
@@ -192,7 +247,7 @@
                  </div>
              </div>
 
-        </#list>
+            </#list>
 
         </#if>
 
@@ -220,7 +275,7 @@
                             ${usuario.username}
                             </div>
                             <div class="col-sm-3">
-                                <a href="#" title="Edit Username"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                <a href="#" title="Edit Username"><i class="fa fa-edit" aria-hidden="true"></i> <i>Edit</i></a>
                             </div>
                         </div>
                         <div class="row modal-row">
@@ -236,7 +291,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <p>
-                                    <a href="#" title="Edit Email"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                    <a href="#" title="Edit Email"><i class="fa fa-edit" aria-hidden="true"></i> <i>Edit</i></a>
                                 </p>
                             </div>
                         </div>
@@ -250,7 +305,7 @@
                                 <p>*********</p>
                             </div>
                             <div class="col-sm-3">
-                                <a href="#" title="Edit Password"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                <a href="#" title="Edit Password"><i class="fa fa-edit" aria-hidden="true"></i> <i>Edit</i></a>
                             </div>
                         </div>
                         <div class="row modal-row">
@@ -288,4 +343,5 @@
 
 
 
-</body></html>
+</body>
+</html>

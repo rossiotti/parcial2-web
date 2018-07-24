@@ -8,13 +8,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>BingoBook</title>
+    <title>SocialBuddy</title>
 
 
     <!-- ====Google Font CSS==== -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:100,200,300,500,700,900' rel="stylesheet" type="text/css">
     <!-- ====Font Awesome CSS==== -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
 
     <!-- ====Favicons==== -->
     <link href="http://themelooks.us/demo/popforms/preview/img/favicon.png" rel="shortcut icon" type="image/x-icon">
@@ -137,13 +138,11 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="slider-2-content text-center">
-                                <h2 class="mdl-typography--display-2 mdl-typography--text-capitalize">lorem ipsum dolor amet consectetur</h2>
-                                <h4 class="mdl-typography--text-capitalize">lorem ipsum dolor sit amet, consectetur adipisicing elit.</h4>
-                                <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#loginFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user"></i> Login<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
-                                <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#signupFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user-plus"></i> Signup<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
-                                <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#forgotFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-lock"></i> Forgot<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
-                                <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#subscribeFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-paper-plane"></i> Subscribe<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
-                                <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#contactFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-envelope"></i> Contact<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+                                <h2 class="mdl-typography--display-2 mdl-typography--text-capitalize">BIENVENIDO A SOCIALBUDDY</h2>
+                                <h4 class="mdl-typography--text-capitalize">LA RED SOCIAL QUE CONECTA A LAS PERSONAS.</h4>
+                                <a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#loginFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user"></i> Login<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+                                <a href="#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#signupFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user-plus"></i> Signup<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
                             </div>
                         </div>
                     </div>
@@ -365,27 +364,7 @@
 <!-- Contact Form End -->
 
 <!-- Color Switcher Start -->
-<div id="open-switcher">
-    <i class="fa fa-paint-brush"></i>
-</div>
-<div id="close-switcher">
-    <i class="fa fa-times"></i>
-</div>
-<div id="demo-colors" class="mdl-card mdl-shadow--24dp">
-    <div id="demo-wrapper">
 
-        <h2>MAIN COLOR:</h2>
-
-        <ul id="mainColors">
-            <li class="color-2 active" data-path="css/main-color-1.css"></li>
-            <li class="color-4" data-path="css/main-color-2.css"></li>
-            <li class="color-3" data-path="css/main-color-3.css"></li>
-            <li class="color-1" data-path="css/main-color-4.css"></li>
-            <li class="color-5" data-path="css/main-color-5.css"></li>
-        </ul>
-
-    </div>
-</div>
 <!-- Color Switcher End -->
 
 <!-- ====jQuery Core JavaScript==== -->

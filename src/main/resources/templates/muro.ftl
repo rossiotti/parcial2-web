@@ -15,6 +15,7 @@
     <script src="js/socialyte.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/buttons.css" type="text/css">
 
     <#if !usuario.lugarNacimiento??>
     <script type="text/javascript">
@@ -22,22 +23,31 @@
             $('#InfoFormModal').modal({backdrop: 'static', keyboard: false, }, 'show');
         });
     </script>
-      <div>
-        <div class="modal fade" id="InfoFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm" >
-            <div class="mdl-card__supporting-text">
-                <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
-                    <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                        <h2>Queremos saber mas de usted.</h2>
-                        <input class="mdl-textfield__input" type="text" name="lugarNacimiento" id="infoLugarNacimiento" placeholder="Donde nacio?"required="required">
-                        <input class="mdl-textfield__input" type="text" name="lugarEstudio" id="infoLugarEstudio" placeholder="Donde estudia?" required="required">
-                        <input class="mdl-textfield__input" type="text" name="lugarResidencia" id="infoLugarResidencia" placeholder="Donde vive?" required="required">
-                        <input class="mdl-textfield__input" type="text" name="lugarTrabajo" id="infoLugarTrabajo" placeholder="Donde trabaja?" required="required">
-                    </div>
-                    <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Update<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
+   <!-- Modal -->
+<div class="modal fade" id="InfoFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title" id="InfoFormModal">Queremos saber mas de usted</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form action="/updateInfo" method="post" id="infoForm" novalidate="novalidate">
+
+                <input type="text" class="form-control" name="lugarNacimiento" id="infoLugarNacimiento" placeholder="Donde nacio?"required="required">
+                <input type="text" class="form-control" name="lugarEstudio" id="infoLugarEstudio" placeholder="Donde estudia?" required="required">
+                <input type="text" class="form-control" name="lugarResidencia" id="infoLugarResidencia" placeholder="Donde vive?" required="required">
+                <input type="text" class="form-control" name="lugarTrabajo" id="infoLugarTrabajo" placeholder="Donde trabaja?" required="required">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary" data-upgraded=",MaterialButton,MaterialRipple">Save changes</button>
                 </form>
             </div>
+        </div>
     </div>
-    </div>
+</div>
     </#if>
 </head>
 
@@ -78,7 +88,7 @@
                 <li>
                     <a href="/logout" title="Settings">
                         <div class="col-xs-4">
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
                         </div>
                         <div class="col-xs-8 text-left">
                             <span>Logout</span>
@@ -107,12 +117,12 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/home" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">
         <form>
-            <span><a href="/perfil?user=${usuario.username}" title="Wall"><span class="hidden-xs hidden-sm">Muro</span> <i class="fa fa-database" aria-hidden="true"></i></a>
+            <span><a href="/home" title="Home"><span class="hidden-xs hidden-sm">Home</span> <i aria-hidden="true"></i></a>
             </span>
         </form>
 
@@ -121,45 +131,90 @@
 
 <!--Left Sidebar with info Profile -->
 <div class="sidebar-nav">
-    <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
+    <a href="/perfil?user=${usuario.username}" title="Profile">
         <img src="img/user.jpg" alt="User name" class="img-circle img-user">
     </a>
-    <h2 class="text-center hidden-xs"><a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">${usuario.nombre} ${usuario.apellidos}</a></h2>
-    <p class="text-center user-description hidden-xs">
-    <ul>
-    <#if usuario.lugarNacimiento??>
-        <li>${usuario.nacimientoFecha}</li>
-        <li>${usuario.lugarNacimiento}</li>
-        <li>${usuario.lugarResidencia}</li>
-        <li>${usuario.lugarTrabajo}</li>
-        <li>${usuario.lugarEstudio}</li>
-    </#if>
-        <br>
-        <form name="submitForm" method="get" action="/listaAmigos">
-            <input type="hidden" name="pagina" value="1">
-            <button class="text-left"type="submit">Ver Amigos</button>
-        </form>
-        <br>
-        <h3 class="text-left" href="">Albumes</h3>
+    <h2 class="text-center hidden-xs"><a href="/perfil?user=${usuario.username}" title="Profile">${usuario.nombre} ${usuario.apellidos}</a></h2>
+        <div class="card card-primary">
+            <br>
+            <!-- /.card-header -->
+             <#if usuario.lugarNacimiento??>
+            <div class="card-body">
+                <strong><i class="fa fa-book mr-1"></i> Education</strong>
 
-    </ul>
+    <p class="text-muted">
+    ${usuario.lugarEstudio}
     </p>
+
+    <hr>
+
+    <strong><i class="fa fa-map-marker mr-1"></i> Location</strong>
+
+    <p class="text-muted">${usuario.lugarNacimiento}</p>
+
+    <hr>
+
+    <strong><i class="fa fa-briefcase"></i> Skills</strong>
+
+    <p class="text-muted">
+    ${usuario.lugarTrabajo}
+    </p>
+
+    <hr>
+
+    <strong><i class="fa fa-building"></i> Residence</strong>
+
+    <p class="text-muted">${usuario.lugarResidencia}</p>
+
+    <hr>
+    <strong><i class="fa fa-birthday-cake"></i> Born</strong>
+
+    <p class="text-muted">${usuario.nacimientoFecha}</p>
+    <hr>
+    <br>
+    </#if>
 </div>
+</div>
+    <div class="pull-left">
+    <form name="submitForm" method="get" action="/listaAmigos">
+        <input type="hidden" name="pagina" value="1">
+        <button class="btn btn-primary" type="submit">Ver Amigos</button>
+    </form>
+    </div>
+    <div class="pull-right">
+        <button type="button" class="btn btn-primary">Albumes</button>
+    </div>
+</div>
+<!-- /.card-body -->
+
 
 <!--Wall with Post -->
 
 <div class="content-posts active" id="posts">
     <div>
-        <a href="http://themelooks.us/demo/popforms/preview/#" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-toggle="modal" data-target="#PostFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-user"></i> Nuevo Post<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+        <button type="button" class="btn btn-primary btn-circle btn-xl" data-toggle="modal" data-target="#PostFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-plus"></i></button>
         <div class="modal fade" id="PostFormModal" tabindex="-1" role="dialog" aria-labelledby="PostForm">
-            <div class="mdl-card__supporting-text">
-                <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
-                    <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                        <input class="mdl-textfield__input" type="text" name="texto" id="textoMuro" placeholder="Que piensas?">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="exampleModalLongTitle">Nuevo Post</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <button type="submit" class="login-form-submit-btn mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" data-upgraded=",MaterialButton,MaterialRipple">Postear<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></button>
-                </form>
-        </div>
+                    <div class="modal-body">
+                        <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
+                            <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                                <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3"></textarea>                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" data-upgraded=",MaterialButton,MaterialRipple">Post</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
     </div>
 
     <div id="posts-container" class="container-fluid container-posts">
@@ -171,7 +226,7 @@
              <div class="card-post">
                  <div class="row">
                      <div class="col-xs-3 col-sm-2">
-                         <a href="https://socialyte.codeplus.it/personal-profile.html" title="Profile">
+                         <a href="/perfil?user=${usuario.username}" title="Profile">
                              <img src="img/user.jpg" alt="User name" class="img-circle img-user">
                          </a>
                      </div>
@@ -198,11 +253,12 @@
                                 </#if>
                                </#list>
                             </#if>
-                             <form action="/post/${post.id}/like" method="post">
-                                 <button type="submit">${countLikes} Like</button>
+
+                             <form class="btn-group" action="/post/${post.id}/like" method="post">
+                                 <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
                              </form>
-                             <form action="/post/${post.id}/dislike" method="post">
-                                 <button type="submit">${countDislikes} Dislike</button>
+                             <form class="btn-group" action="/post/${post.id}/dislike" method="post">
+                                 <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
                              </form>
                          </div>
 
@@ -214,7 +270,6 @@
                                    </ul>
                                 </#list>
                              </#if>
-                             <div class="more-comments">View more comments</div>
                              <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">
                                  <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
                              </form>
@@ -251,7 +306,7 @@
                             ${usuario.username}
                             </div>
                             <div class="col-sm-3">
-                                <a href="#" title="Edit Username"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                <a href="#" title="Edit Username"><i class="fa fa-edit" aria-hidden="true"></i> <i>Edit</i></a>
                             </div>
                         </div>
                         <div class="row modal-row">
@@ -267,7 +322,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <p>
-                                    <a href="#" title="Edit Email"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                    <a href="#" title="Edit Email"><i class="fa fa-edit" aria-hidden="true"></i> <i>Edit</i></a>
                                 </p>
                             </div>
                         </div>
@@ -281,7 +336,7 @@
                                 <p>*********</p>
                             </div>
                             <div class="col-sm-3">
-                                <a href="#" title="Edit Password"><i class="fa fa-pencil" aria-hidden="true"></i> <i>Edit</i></a>
+                                <a href="#" title="Edit Password"><i class="fa fa-edit" aria-hidden="true"></i> <i>Edit</i></a>
                             </div>
                         </div>
                         <div class="row modal-row">
@@ -319,4 +374,5 @@
 
 
 
-</body></html>
+</body>
+</html>
