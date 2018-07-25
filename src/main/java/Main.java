@@ -28,12 +28,10 @@ public class Main {
         configuration.setClassForTemplateLoading(Main.class, "/");
 
 
-
         ORM.UsuarioORM usuarioORM = new UsuarioORM();
         ORM.PostORM postORM = new PostORM();
         ORM.ComentarioORM comentarioORM = new ComentarioORM();
         ORM.ReaccionORM reaccionORM = new ReaccionORM();
-
 
 
         if(usuarioORM.countUsuarios() == 0){
@@ -200,7 +198,7 @@ public class Main {
             post.setUsuario(usuario);
             post.setReaccions(new ArrayList<>());
             post.setTiempo(getFechaActual());
-            post.setReaccions(new ArrayList<>());
+            post.setComentario(new ArrayList<>());
             postORM.guardarPost(post);
 
             if(usuarioP.equalsIgnoreCase("muro")){
@@ -225,27 +223,37 @@ public class Main {
             reaccion.setUsuario(usuario);
             reaccion.setReaccion(true);
             reaccion.setTiempo(getFechaActual());
-            Post post = postORM.getPost(idPost);
-            for(int i = 0; i<usuario.getMuro().size(); i++){
-                if(idPost == usuario.getMuro().get(i).getId()){
-                    if( usuario.getMuro().get(i).getReaccions().size() == 0){
-                        usuario.getMuro().get(i).getReaccions().add(reaccion);
+
+            int index = 0;
+            for(int i = 0; i< usuario.getMuro().size(); i++){
+                if(usuario.getMuro().get(i).getId() == idPost)
+                    index = i;
+            }
+            if(usuario.getMuro().get(index).getReaccions().size() == 0){
+                reaccionORM.guardarLike(reaccion);
+                postORM.getPost(idPost).getReaccions().add(reaccion);
+                usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
+                postORM.addLike(postORM.getPost(idPost));
+            }else{
+                System.out.println("Entro");
+                for(int j = 0; j<usuario.getMuro().get(index).getReaccions().size(); j++){
+                    if(!usuario.getMuro().get(index).getReaccions().get(j).getUsuario().getId().equals(usuario.getId())){
                         reaccionORM.guardarLike(reaccion);
-                        postORM.addLike(post,reaccion);
+                        postORM.getPost(idPost).getReaccions().add(reaccion);
+                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
+                        postORM.addLike(postORM.getPost(idPost));
                     }else{
-                        for(int j = 0; j < post.getReaccions().size(); j ++){
-                            if(post.getReaccions().get(j).getUsuario().getId() != usuario.getId()){
-                                usuario.getMuro().get(i).getReaccions().add(reaccion);
-                                reaccionORM.guardarLike(reaccion);
-                                postORM.addLike(post,reaccion);
-                            }else{
-                                postORM.updateLike(post,post.getReaccions().get(j));
-                                usuario.getMuro().get(i).getReaccions().remove(j);
-                            }
-                        }
+                        postORM.getPost(idPost).getReaccions().remove(j);
+                        postORM.addLike(postORM.getPost(idPost));
+                        reaccionORM.deleteLike(usuario.getMuro().get(index).getReaccions().get(j));
+                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().remove(j);
+                        postORM.addLike(postORM.getPost(idPost));
                     }
                 }
             }
+
+
+
             res.redirect("/home");
             return "";
             });
@@ -258,28 +266,37 @@ public class Main {
             reaccion.setUsuario(usuario);
             reaccion.setReaccion(false);
             reaccion.setTiempo(getFechaActual());
-            Post post = postORM.getPost(idPost);
-            for(int i = 0; i<usuario.getMuro().size(); i++){
-                if(idPost == usuario.getMuro().get(i).getId()){
-                    if( usuario.getMuro().get(i).getReaccions().size() == 0){
-                        usuario.getMuro().get(i).getReaccions().add(reaccion);
-                        reaccionORM.guardarLike(reaccion);
-                        postORM.addLike(post,reaccion);
-                    }else{
-                        for(int j = 0; j < post.getReaccions().size(); j ++){
-                            if(post.getReaccions().get(j).getUsuario().getId() != usuario.getId()){
-                                usuario.getMuro().get(i).getReaccions().add(reaccion);
-                                reaccionORM.guardarLike(reaccion);
-                                postORM.addLike(post,reaccion);
-                            }else{
-                                postORM.updateLike(post,post.getReaccions().get(j));
-                                usuario.getMuro().get(i).getReaccions().remove(j);
 
-                            }
-                        }
+            int index = 0;
+            for(int i = 0; i< usuario.getMuro().size(); i++){
+                if(usuario.getMuro().get(i).getId() == idPost)
+                    index = i;
+            }
+            if(usuario.getMuro().get(index).getReaccions().size() == 0){
+                reaccionORM.guardarLike(reaccion);
+                postORM.getPost(idPost).getReaccions().add(reaccion);
+                usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
+                postORM.addLike(postORM.getPost(idPost));
+            }else{
+                System.out.println("Entro");
+                for(int j = 0; j<usuario.getMuro().get(index).getReaccions().size(); j++){
+                    if(!usuario.getMuro().get(index).getReaccions().get(j).getUsuario().getId().equals(usuario.getId())){
+                        reaccionORM.guardarLike(reaccion);
+                        postORM.getPost(idPost).getReaccions().add(reaccion);
+                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
+                        postORM.addLike(postORM.getPost(idPost));
+                    }else{
+                        postORM.getPost(idPost).getReaccions().remove(j);
+                        postORM.addLike(postORM.getPost(idPost));
+                        reaccionORM.deleteLike(usuario.getMuro().get(index).getReaccions().get(j));
+                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().remove(j);
+                        postORM.addLike(postORM.getPost(idPost));
                     }
                 }
             }
+
+
+
             res.redirect("/home");
             return "";
         });
@@ -435,16 +452,17 @@ public class Main {
             Comentario c = new Comentario();
             c.setAutor(usuario);
             c.setComentario(comentario);
-
-
             c.setTiempo(getFechaActual());
-            for(int i = 0; i<usuario.getMuro().size(); i++){
-                if(idPost == usuario.getMuro().get(i).getId())
-                    usuario.getMuro().get(i).getComentario().add(c);
-            }
 
+            int index = 0;
             comentarioORM.guardarComentario(c);
-            postORM.addComentario(postORM.getPost(idPost),c);
+            postORM.getPost(idPost).getComentario().add(c);
+            for(int i = 0; i< usuario.getMuro().size(); i++){
+                if(usuario.getMuro().get(i).getId() == idPost)
+                    index = i;
+            }
+            usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getComentario().add(c);
+            postORM.addComentario(postORM.getPost(idPost));
 
 
             res.redirect("/home");
@@ -474,6 +492,7 @@ public class Main {
             Usuario amigo = usuarioORM.getUsuarioId(Long.parseLong(texto));
             if(usuario.getAmigos().size()==0)
                 usuarioORM.agregarAmigo(usuario,amigo);
+
             for(int i = 0; i<usuario.getAmigos().size(); i++){
                 if(!usuario.getAmigos().get(i).getId().equals(amigo.getId())){
                         usuarioORM.agregarAmigo(usuario,amigo);

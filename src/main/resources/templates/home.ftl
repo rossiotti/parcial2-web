@@ -232,6 +232,7 @@
                                 <input class="mdl-textfield__input" type="text" name="apellidos" id="singupApellidos" placeholder="Apellidos" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                                <h10>(No se pueden nombres de usuario con espacios)</h10>
                                 <input class="mdl-textfield__input" type="text" name="username" id="singupUsername" placeholder="Username" required="required">
                             </div>
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
@@ -245,6 +246,7 @@
                             </div>
 
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
+                                <h10>(Debe ser mayor de 13 años para usar SocialBuddy)</h10>
                                 <input class="mdl-textfield__input" type="date" name="fechaNacimiento" id="singupBirthDate"placeholder="Fecha de Nacimiento" required="required">
                             </div>
 

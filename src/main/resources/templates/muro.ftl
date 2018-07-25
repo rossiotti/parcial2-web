@@ -253,7 +253,8 @@
                          <div class="reaction">
                              <#assign countLikes = 0>
                              <#assign countDislikes = 0>
-                            <#if post.reaccions??>
+
+                            <#if post.reaccions?size &gt; 0>
                                <#list post.reaccions as likes>
                                 <#if likes.reaccion == true>
                                 <#assign countLikes = countLikes + 1>
@@ -272,7 +273,8 @@
                          </div>
 
                          <div class="comments">
-                             <#if post.comentario??>
+
+                             <#if post.comentario?size &gt; 0>
                                 <#list post.comentario as comentarios>
                                    <ul>
                                        <li><b>${comentarios.autor.nombre} ${comentarios.autor.apellidos}</b> ${comentarios.comentario}</li>

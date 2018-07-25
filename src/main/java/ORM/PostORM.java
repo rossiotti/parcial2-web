@@ -23,23 +23,16 @@ public class PostORM {
         em.getTransaction().commit();
 
     }
-    public void addComentario(Post p, Comentario comentario){
+    public void addComentario(Post p){
         em.getTransaction().begin();
         Post po = em.find(Post.class,p.getId());
-        if(po.getComentario()==null)
-            po.setComentario(new ArrayList<>());
-        po.getComentario().add(comentario);
         em.merge(po);
         em.getTransaction().commit();
     }
 
-    public void addLike(Post p, Reaccion reaccion){
+    public void addLike(Post p){
         em.getTransaction().begin();
         Post po = em.find(Post.class,p.getId());
-        if(po.getReaccions()==null)
-            po.setComentario(new ArrayList<>());
-
-        po.getReaccions().add(reaccion);
         em.merge(po);
         em.getTransaction().commit();
     }
