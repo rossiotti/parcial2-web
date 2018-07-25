@@ -174,17 +174,18 @@
     <br>
     </#if>
 </div>
+            <div class="pull-left">
+                <form name="submitForm" method="get" action="/listaAmigos">
+                    <input type="hidden" name="pagina" value="1">
+                    <button class="btn btn-primary" type="submit">Ver Amigos</button>
+                </form>
+            </div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary">Albumes</button>
+            </div>
+        </div>
 </div>
-    <div class="pull-left">
-    <form name="submitForm" method="get" action="/listaAmigos">
-        <input type="hidden" name="pagina" value="1">
-        <button class="btn btn-primary" type="submit">Ver Amigos</button>
-    </form>
-    </div>
-    <div class="pull-right">
-        <button type="button" class="btn btn-primary">Albumes</button>
-    </div>
-</div>
+
 <!-- /.card-body -->
 
 
@@ -203,7 +204,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
+                        <form action="/crearPost/muro" method="post" id="loginForm" novalidate="novalidate">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
                                 <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3"></textarea>                            </div>
 

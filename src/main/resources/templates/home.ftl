@@ -108,7 +108,7 @@
 
     <#if invalid = 3>
        <script type="text/javascript">
-           alert("Usuario/Correo no encontrado.");
+           alert("Usuario/Correo no encontrado. Verifique usuario y contraseña");
 
            $(window).on('load',function(){
                $('#loginFormModal').modal('show');

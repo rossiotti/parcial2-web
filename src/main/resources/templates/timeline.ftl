@@ -1,32 +1,202 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Timeline</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="css/timeline.css" type="text/css">
+    <script src="js/jquery-3.2.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap-switch.min.css">
+    <script src="js/bootstrap-switch.min.js"></script>
+    <script src="js/twemoji.min.js"></script>
+    <script src="js/lazy-load.min.js"></script>
+    <script src="js/socialyte.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="css/buttons.css" type="text/css">
 </head>
-<div id="content">
-    <h1>Timeline (Saira + Chivo Fonts)</h1>
 
+<body id="wall">
+
+<!--Header with Nav -->
+<header class="text-right">
+    <form action="/buscarPersonas" class="text-left search" method="GET">
+        <input name="q" type="text" placeholder="Search..">
+        <input type="hidden" name="pagina" value="1">
+    </form>
+    <div class="menu-icon">
+        <div class="dropdown">
+                <span class="dropdown-toggle" role="button" id="dropdownSettings" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <span class="hidden-xs hidden-sm">Settings</span> <i class="fa fa-cogs" aria-hidden="true"></i>
+                </span>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownSettings">
+                <li>
+                    <a href="#" title="Settings" data-toggle="modal" data-target="#settingsFormModal">
+                        <div class="col-xs-4">
+                            <i class="fa fa-wrench" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-xs-8 text-left">
+                            <span>Settings</span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="" title="Settings">
+                        <div class="col-xs-4">
+                            <i class="fa fa-question" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-xs-8 text-left">
+                            <span>FAQ</span>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/logout" title="Settings">
+                        <div class="col-xs-4">
+                            <i class="fa fa-sign-out-alt" aria-hidden="true"></i>
+                        </div>
+                        <div class="col-xs-8 text-left">
+                            <span>Logout</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="second-icon dropdown menu-icon">
+            <span class="dropdown-toggle" role="button" id="dropdownNotification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <span class="hidden-xs hidden-sm">Notifications</span> <i class="fa fa-bell" aria-hidden="true"></i> <span class="badge">2</span>
+            </span>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownNotification">
+            <li class="new-not">
+                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user2.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+            </li>
+            <li class="new-not">
+                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user3.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+            </li>
+            <li>
+                <a href="https://socialyte.codeplus.it/wall.html#" title="User name comment"><img src="img/user4.jpg" alt="User name" class="img-circle img-user-mini"> User comments your post</a>
+            </li>
+            <li role="separator" class="divider"></li>
+            <li><a href="https://socialyte.codeplus.it/wall.html#" title="All notifications">All Notifications</a></li>
+        </ul>
+    </div>
+    <div class="second-icon menu-icon">
+            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
+        <form>
+            <span><a href="/home" title="Home"><span class="hidden-xs hidden-sm">Home</span> <i aria-hidden="true"></i></a>
+            </span>
+        </form>
+
+    </div>
+</header>
+
+
+<div id="content">
+    <h1>Timeline</h1>
     <ul class="timeline">
-        <li class="event" data-date="65Million B.C.">
-            <h3>Dinosaurs Roamed the Earth</h3>
-            <p>RAWWWWWWRRR.</p>
+
+        <#if muro?size &gt; 0>
+        <#list muro as eventos>
+        <li class="event" data-date="${eventos.tiempo}">
+            <h3>${eventos.usuario.nombre} ${eventos.usuario.apellidos} posteo:</h3>
+            <div class="card-post">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-2">
+                        <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
+                            <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                        </a>
+                    </div>
+                    <div class="col-xs-9 col-sm-10 info-user">
+
+                        <form name="submitForm" method="get" action="/perfil">
+                            <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 data-post">
+                        <p>${eventos.texto}</p>
+                    </div>
+                </div>
+            </div>
         </li>
-        <li class="event" data-date="2005">
-            <h3>Creative Component Launched</h3>
-            <p>Sed posuere consectetur est at lobortis. Nullam quis risus eget urna mollis ornare vel eu leo. Donec sed odio dui. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum.</p>
-        </li>
-        <li class="event" data-date="2009">
-            <h3>Squareflair was Born</h3>
-            <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Nullam id dolor id nibh ultricies vehicula ut id elit. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Vestibulum id ligula porta felis euismod semper.</p> <p>Get ready!</p>
-        </li>
-        <li class="event" data-date="January 24, 2018">
-            <h3>Squareflair Today</h3>
-            <p>Our success can be measured by lives changed and enhanced by more than eight years of Squarespace-focused service.</p>
-        </li>
+
+        <#if eventos.comentario??>
+        <#list eventos.comentario as comentarios>
+<li class="event" data-date="${comentarios.tiempo}">
+    <h3>${comentarios.autor.nombre} ${comentarios.autor.apellidos} comento:</h3>
+    <h2>${comentarios.comentario}</h2> en
+    <div class="card-post">
+        <div class="row">
+            <div class="col-xs-3 col-sm-2">
+                <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
+                    <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                </a>
+            </div>
+            <div class="col-xs-9 col-sm-10 info-user">
+
+                <form name="submitForm" method="get" action="/perfil">
+                    <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 data-post">
+                <p>${eventos.texto}</p>
+            </div>
+        </div>
+    </div>
+</li>
+</li>
+        </#list>
+        </#if>
+
+        <#if eventos.reaccions??>
+        <#list eventos.reaccions as reaccion>
+<li class="event" data-date="${reaccion.tiempo}">
+    <h3>${reaccion.usuario.nombre} ${reaccion.usuario.apellidos} reacciono:</h3>
+    <#if reaccion.reaccion == true>
+    <h2>Le gusto</h2>
+    <#else>
+    <h2>No le gusto</h2>
+    </#if>
+    :
+    <div class="card-post">
+        <div class="row">
+            <div class="col-xs-3 col-sm-2">
+                <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
+                    <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                </a>
+            </div>
+            <div class="col-xs-9 col-sm-10 info-user">
+
+                <form name="submitForm" method="get" action="/perfil">
+                    <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2 data-post">
+                <p>${eventos.texto}</p>
+            </div>
+        </div>
+    </div>
+</li>
+</li>
+        </#list>
+        </#if>
+        </#list>
     </ul>
+<#else>
+        <h1>No ha pasado nada</h1>
+        </#if>
+
 </div>
 </html>

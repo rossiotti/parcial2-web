@@ -54,10 +54,9 @@ public class PostORM {
         em.getTransaction().commit();
     }
 
-    public List<Post> getMuro(Usuario usuario){
+    public List<Post> getMuro(){
 
-        Query query = em.createQuery("select p from Post p where p.usuario.id = ?1 order by p.tiempo desc")
-                .setParameter(1,usuario.getId());
+        Query query = em.createQuery("select p from Post p order by p.tiempo desc");
         return (List<Post>)query.getResultList();
     }
 

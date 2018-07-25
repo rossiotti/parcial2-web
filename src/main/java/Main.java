@@ -27,10 +27,14 @@ public class Main {
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setClassForTemplateLoading(Main.class, "/");
 
+
+
         ORM.UsuarioORM usuarioORM = new UsuarioORM();
         ORM.PostORM postORM = new PostORM();
         ORM.ComentarioORM comentarioORM = new ComentarioORM();
         ORM.ReaccionORM reaccionORM = new ReaccionORM();
+
+
 
         if(usuarioORM.countUsuarios() == 0){
             Usuario admin = new Usuario();
@@ -105,7 +109,7 @@ public class Main {
 
             }
             List<Post> muro = usuario.getMuro();
-            Collections.reverse(usuario.getMuro());
+            Collections.sort(muro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
 
             atr.put("usuario",usuario);
             atr.put("muro",muro);
@@ -185,10 +189,12 @@ public class Main {
             return "";
         });
 
-        post("/crearPost", (req, res) -> {
+        post("/crearPost/:user", (req, res) -> {
 
             Usuario usuario = req.session(true).attribute("usuario");
             String texto = req.queryParams("texto");
+            String usuarioP = req.params("user");
+            System.out.println(usuarioP);
             Post post = new Post();
             post.setTexto(texto);
             post.setUsuario(usuario);
@@ -196,9 +202,17 @@ public class Main {
             post.setTiempo(getFechaActual());
             post.setReaccions(new ArrayList<>());
             postORM.guardarPost(post);
-            usuarioORM.addPost(usuario,post);
-            System.out.println(usuario.getMuro());
-            res.redirect("/home");
+
+            if(usuarioP.equalsIgnoreCase("muro")){
+                usuarioORM.addPost(usuario,post);
+                res.redirect("/home");
+
+            }else{
+                usuarioORM.addPost(usuarioORM.getUsuarioUsername(usuarioP),post);
+                res.redirect("/perfil?user="+usuarioP);
+            }
+
+
             return "";
 
         });
@@ -277,7 +291,7 @@ public class Main {
             Template template = configuration.getTemplate("templates/friendListRes.ftl");
             int pagina = Integer.parseInt(req.queryParams("pagina"));
             System.out.println((req).   queryParams("q"));
-            List<Usuario> filtrados = usuarioORM.listarUsuarios(pagina,req.queryParams("q"));
+            List<Usuario> filtrados = usuarioORM.listarUsuarios(pagina,req.queryParams("q"),usuario.getId());
             int maxPagina = (int) Math.ceil(filtrados.size() / 5);
             atr.put("pagina", pagina);
 
@@ -313,7 +327,9 @@ public class Main {
             String username = req.queryParams("user");
             Usuario uNuevo = usuarioORM.getUsuarioUsername(username);
             List<Post> uMuro = uNuevo.getMuro();
-            Collections.reverse(uMuro);
+
+            Collections.sort(uMuro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
+
             atr.put("usuarioP",uNuevo);
             atr.put("muroP",uMuro);
             atr.put("usuario",usuario);
@@ -326,6 +342,16 @@ public class Main {
             StringWriter writer = new StringWriter();
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/timeline.ftl");
+
+
+            if(usuario.getAmigos() != null){
+                for(int i = 0; i < usuario.getAmigos().size(); i++){
+                    smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
+                }
+            }
+            List<Post> muro = usuario.getMuro();
+            atr.put("usuario",usuario);
+            atr.put("muro",muro);
             template.process(atr,writer);
             return writer;
         });
@@ -369,6 +395,8 @@ public class Main {
             Comentario c = new Comentario();
             c.setAutor(usuario);
             c.setComentario(comentario);
+
+
             c.setTiempo(getFechaActual());
             for(int i = 0; i<usuario.getMuro().size(); i++){
                 if(idPost == usuario.getMuro().get(i).getId())
@@ -377,7 +405,8 @@ public class Main {
 
             comentarioORM.guardarComentario(c);
             postORM.addComentario(postORM.getPost(idPost),c);
-            System.out.println(postORM.getPost(idPost).getComentario());
+
+
             res.redirect("/home");
             return null;
         });
@@ -432,4 +461,5 @@ public class Main {
         long time = date.getTime();
          return new Timestamp(time);
     }
+
 }

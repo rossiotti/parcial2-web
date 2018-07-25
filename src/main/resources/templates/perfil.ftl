@@ -85,7 +85,7 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="/home" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-user" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">
@@ -172,7 +172,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/crearPost" method="post" id="loginForm" novalidate="novalidate">
+                        <form action="/crearPost/${usuarioP.username}" method="post" id="loginForm" novalidate="novalidate">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
                                 <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3"></textarea>                            </div>
 

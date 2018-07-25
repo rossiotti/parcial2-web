@@ -87,10 +87,8 @@
             <li><a href="https://socialyte.codeplus.it/wall.html#" title="All notifications">All Notifications</a></li>
         </ul>
     </div>
-    <div class="second-icon menu-icon">
-            <span><a href="/home" title="Profile"><span class="hidden-xs hidden-sm">Profile</span> <i class="fa fa-user" aria-hidden="true"></i></a>
-            </span>
     </div>
+
     <div class="second-icon menu-icon">
         <form>
             <span><a href="/home" title="Home"><span class="hidden-xs hidden-sm">Home</span> <i aria-hidden="true"></i></a>
