@@ -317,6 +317,46 @@ public class Main {
             return writer;
         });
 
+        get("/sugerirAmigos", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/friendListRes.ftl");
+            int pagina = Integer.parseInt(req.queryParams("pagina"));
+            List<Usuario> filtrados = usuarioORM.sugerirAmigos(usuario);
+            List<Usuario> sinUser = new ArrayList<>();
+            for(Usuario u: filtrados){
+                if(u.getId() != usuario.getId()){
+                    sinUser.add(u);
+                }
+            }
+
+
+            int maxPagina = (int) Math.ceil(filtrados.size() / 5);
+            atr.put("pagina", pagina);
+
+            if(pagina >= maxPagina){
+                atr.put("valorSiguiente", 0);
+            }else{
+                atr.put("valorSiguiente", 1);
+            }
+
+            if(pagina <= 1){
+                atr.put("valorAnterior", 0);
+                System.out.println(pagina);
+            }else{
+                atr.put("valorAnterior", 1);
+            }
+
+            atr.put("anterior", (pagina - 1));
+            atr.put("siguiente", (pagina + 1));
+            atr.put("resultados",sinUser);
+            atr.put("usuario",usuario);
+            atr.put("listaAmigos",usuario.getAmigos());
+            template.process(atr,writer);
+            return writer;
+        });
+
 
 
         get("/perfil", (req, res) -> {

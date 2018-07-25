@@ -117,7 +117,11 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/sugerirAmigos?pagina=1" title="Sugerencia"><span class="hidden-xs hidden-sm">Sugerir Amigos</span> <i class="fas fa-user-plus" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
+            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-clock-o" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">
@@ -219,8 +223,12 @@
     </div>
 
     <div id="posts-container" class="container-fluid container-posts">
-
-        <#if usuario.muro??>
+<#if usuario.muro?size == 0>
+<h2>Parece que no tienes amigos, aqui hay algunas personas que tal vez conozcas:</h2>
+<span><a href="/sugerirAmigos?pagina=1" title="Sugerencias"><span class="hidden-xs hidden-sm">Ver Personas</span> <i class="fa fa-user-plus" aria-hidden="true"></i></a>
+            </span>
+</#if>
+        <#if usuario.muro?size &gt; 0>
 
           <#list muro as post>
 

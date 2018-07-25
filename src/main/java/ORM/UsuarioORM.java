@@ -35,11 +35,15 @@ public class UsuarioORM {
 
     }
 
-    public List<Usuario> sugerirAmigos(String text){
+    public List<Usuario> sugerirAmigos(Usuario usuario){
         try{
-            Query query = em.createQuery("select u from Usuario u where u.username = ?1 or u.nombre = ?1 or u.apellidos = ?1 or u.lugarEstudio = ?1" +
-                    " or u.lugarNacimiento = ?1 or u.lugarResidencia = ?1 or u.lugarTrabajo = ?1")
-                    .setParameter(1,text);
+            Query query = em.createQuery("select u from Usuario u where u.lugarEstudio = ?1" +
+                    " or u.lugarNacimiento = ?2 or u.lugarResidencia = ?3 or u.lugarTrabajo = ?4 and u.id != ?5")
+                    .setParameter(1,usuario.getLugarEstudio())
+                    .setParameter(2,usuario.getLugarNacimiento())
+                    .setParameter(3,usuario.getLugarResidencia())
+                    .setParameter(4,usuario.getLugarTrabajo())
+                    .setParameter(5,usuario.getId());
 
             return (List<Usuario>)query.getResultList();
         }catch (NoResultException e){
