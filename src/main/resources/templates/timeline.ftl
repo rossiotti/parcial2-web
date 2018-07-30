@@ -128,70 +128,77 @@
             </div>
         </li>
 
-        <#if eventos.comentario??>
-        <#list eventos.comentario as comentarios>
-<li class="event" data-date="${comentarios.tiempo}">
-    <h3>${comentarios.autor.nombre} ${comentarios.autor.apellidos} comento:</h3>
-    <h2>${comentarios.comentario}</h2> en
-    <div class="card-post">
-        <div class="row">
-            <div class="col-xs-3 col-sm-2">
-                <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
-                    <img src="img/user.jpg" alt="User name" class="img-circle img-user">
-                </a>
-            </div>
-            <div class="col-xs-9 col-sm-10 info-user">
+        <#if comentarios??>
+        <#list comentarios as comments>
+        <#if comments.post.id == eventos.id>
+        <li class="event" data-date="${comments.tiempo}">
+            <h3>${comments.autor.nombre} ${comments.autor.apellidos} comento:</h3>
+            <h2>${comments.comentario}</h2> en
+            <div class="card-post">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-2">
+                        <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
+                            <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                        </a>
+                    </div>
+                    <div class="col-xs-9 col-sm-10 info-user">
 
-                <form name="submitForm" method="get" action="/perfil">
-                    <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
-                </form>
+                        <form name="submitForm" method="get" action="/perfil">
+                            <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 data-post">
+                        <p>${eventos.texto}</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 data-post">
-                <p>${eventos.texto}</p>
-            </div>
-        </div>
-    </div>
+        </li>
 </li>
-</li>
+        </#if>
         </#list>
         </#if>
 
-        <#if eventos.reaccions??>
-        <#list eventos.reaccions as reaccion>
-<li class="event" data-date="${reaccion.tiempo}">
-    <h3>${reaccion.usuario.nombre} ${reaccion.usuario.apellidos} reacciono:</h3>
+
+        <#if reacciones??>
+        <#list reacciones as reaccion>
+        <#if reaccion.post.id == eventos.id>
+        <li class="event" data-date="${reaccion.tiempo}">
+            <h3>${reaccion.usuario.nombre} ${reaccion.usuario.apellidos} reacciono:</h3>
     <#if reaccion.reaccion == true>
     <h2>Le gusto</h2>
     <#else>
     <h2>No le gusto</h2>
     </#if>
-    :
-    <div class="card-post">
-        <div class="row">
-            <div class="col-xs-3 col-sm-2">
-                <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
-                    <img src="img/user.jpg" alt="User name" class="img-circle img-user">
-                </a>
-            </div>
-            <div class="col-xs-9 col-sm-10 info-user">
+            :
+            <div class="card-post">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-2">
+                        <a href="/perfil?user=${eventos.usuario.username}" title="Profile">
+                            <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                        </a>
+                    </div>
+                    <div class="col-xs-9 col-sm-10 info-user">
 
-                <form name="submitForm" method="get" action="/perfil">
-                    <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
-                </form>
+                        <form name="submitForm" method="get" action="/perfil">
+                            <strong><a href="/perfil?user=${eventos.usuario.username}">  ${eventos.usuario.nombre} ${eventos.usuario.apellidos}</a></strong>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 data-post">
+                        <p>${eventos.texto}</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 data-post">
-                <p>${eventos.texto}</p>
-            </div>
-        </div>
-    </div>
+        </li>
 </li>
-</li>
+
+        </#if>
         </#list>
         </#if>
+
         </#list>
     </ul>
 <#else>

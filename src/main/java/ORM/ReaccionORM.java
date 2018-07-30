@@ -1,5 +1,6 @@
 package ORM;
 
+import clases.Comentario;
 import clases.Post;
 import clases.Reaccion;
 import clases.Usuario;
@@ -44,10 +45,21 @@ public class ReaccionORM {
         em.getTransaction().commit();
     }
 
-    public Reaccion checkLike(Usuario Usuario, Post post){
+    public Reaccion checkLikePost(Usuario Usuario, Post post){
         try{
             Query query = em.createQuery("select r from Reaccion r where r.post = ?1 AND r.usuario = ?2")
                     .setParameter(1, post)
+                    .setParameter(2, Usuario);
+            return (Reaccion)query.getSingleResult();
+        } catch(NoResultException e){
+            return null;
+        }
+    }
+
+    public Reaccion checkLikeComentario(Usuario Usuario, Comentario comentario){
+        try{
+            Query query = em.createQuery("select r from Reaccion r where r.comentario = ?1 AND r.usuario = ?2")
+                    .setParameter(1, comentario)
                     .setParameter(2, Usuario);
             return (Reaccion)query.getSingleResult();
         } catch(NoResultException e){

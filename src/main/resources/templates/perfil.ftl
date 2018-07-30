@@ -192,10 +192,11 @@
 
             <#list muroP as post>
 
+
              <div class="card-post">
                  <div class="row">
                      <div class="col-xs-3 col-sm-2">
-                         <a href="/perfil?user=${usuarioP.username}" title="Profile">
+                         <a href="/perfil?user=${usuario.username}" title="Profile">
                              <img src="img/user.jpg" alt="User name" class="img-circle img-user">
                          </a>
                      </div>
@@ -211,16 +212,23 @@
                      <div class="col-sm-8 col-sm-offset-2 data-post">
                          <p>${post.texto}</p>
                          <div class="reaction">
-                             <#assign countLikes = 0>
-                             <#assign countDislikes = 0>
-                            <#if post.reaccions??>
-                                <#list post.reaccions as likes>
-                                    <#if likes.reaccion == true>
-                                        <#assign countLikes = countLikes + 1>
-                                    <#else>
-                                        <#assign countDislikes = countDislikes + 1>
-                                    </#if>
-                                </#list>
+
+
+                            <#if reacciones??>
+                            <#assign countLikes = 0>
+                            <#assign countDislikes = 0>
+                            <#list reacciones as likes>
+                            <#if likes.post??>
+                            <#if likes.post.id == post.id>
+                            <#if likes.reaccion == true>
+                            <#assign countLikes = countLikes + 1>
+                            <#else>
+                            <#assign countDislikes = countDislikes + 1>
+                            </#if>
+
+                            </#if>
+                            </#if>
+                            </#list>
                             </#if>
 
                              <form class="btn-group" action="/post/${post.id}/like" method="post">
@@ -232,12 +240,41 @@
                          </div>
 
                          <div class="comments">
-                             <#if post.comentario??>
-                                 <#list post.comentario as comentarios>
-                                   <ul>
-                                       <li><b>${comentarios.autor.nombre} ${comentarios.autor.apellidos}</b> ${comentarios.comentario}</li>
-                                   </ul>
-                                 </#list>
+
+                             <#if comentarios??>
+                             <#list comentarios as comments>
+                             <#if comments.post.id == post.id>
+                                 <ul>
+                                     <li><b>${comments.autor.nombre} ${comments.autor.apellidos}</b> ${comments.comentario} <div class="reaction">
+
+
+                                   <#if reacciones??>
+                                   <#assign countLikes = 0>
+                                   <#assign countDislikes = 0>
+                                   <#list reacciones as likes>
+                                   <#if likes.comentario??>
+                                   <#if likes.comentario.id == comments.id>
+                                   <#if likes.reaccion == true>
+                                   <#assign countLikes = countLikes + 1>
+                                   <#else>
+                                   <#assign countDislikes = countDislikes + 1>
+                                   </#if>
+                                   </#if>
+                                   </#if>
+
+                                   </#list>
+                                   </#if>
+
+                                         <form class="btn-group" action="/comentario/${comments.id}/like" method="post">
+                                             <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
+                                         </form>
+                                         <form class="btn-group" action="/comentario/${comments.id}/dislike" method="post">
+                                             <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
+                                         </form>
+                                     </div></li>
+                                 </ul>
+                             </#if>
+                             </#list>
                              </#if>
                              <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">
                                  <input type="text" class="form-control" placeholder="Add a comment" name="comentario">

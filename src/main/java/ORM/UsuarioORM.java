@@ -166,9 +166,9 @@ public class UsuarioORM {
 
     public List<Usuario> getUsuarioList(){
 
-            List<Usuario> l = em.createQuery("select u from Usuario u")
-            .getResultList();
-            return l;
+        List<Usuario> l = em.createQuery("select u from Usuario u")
+                .getResultList();
+        return l;
 
     }
 

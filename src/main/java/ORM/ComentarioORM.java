@@ -19,6 +19,12 @@ public class ComentarioORM {
 
     }
 
+    public Comentario getComentario(Long id){
+        Query query = em.createQuery("select c from Comentario c where c.id = :id")
+                .setParameter("id", id);
+        return (Comentario) query.getSingleResult();
+    }
+
     public Long countComentarios() {
         Long count = ((Number) em.createNativeQuery("select count(Comentario.id) from USUARIO").getSingleResult()).longValue();
         return count;

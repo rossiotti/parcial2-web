@@ -227,7 +227,7 @@ public class Main {
             reaccion.setTiempo(getFechaActual());
             Post post = postORM.getPost(idPost);
             reaccion.setPost(post);
-            Reaccion re = reaccionORM.checkLike(usuario,post);
+            Reaccion re = reaccionORM.checkLikePost(usuario,post);
             if(re == null){
                 reaccionORM.guardarLike(reaccion);
                 res.redirect("/home");
@@ -243,6 +243,58 @@ public class Main {
             return "";
             });
 
+        post("/comentario/:id/like", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            Long idComentario = Long.parseLong(req.params("id"));
+            Reaccion reaccion = new Reaccion();
+            reaccion.setUsuario(usuario);
+            reaccion.setReaccion(true);
+            reaccion.setTiempo(getFechaActual());
+            Comentario comentario = comentarioORM.getComentario(idComentario);
+            reaccion.setComentario(comentario);
+            Reaccion re = reaccionORM.checkLikeComentario(usuario,comentario);
+
+            if(re == null){
+                reaccionORM.guardarLike(reaccion);
+                res.redirect("/home");
+            }else{
+                reaccionORM.deleteLike(re);
+
+                if(!re.isReaccion())
+                    reaccionORM.updateLike(re,true);
+
+                res.redirect("/home");
+            }
+
+            return "";
+        });
+
+        post("/comentario/:id/dislike", (req, res) -> {
+
+            Usuario usuario = req.session(true).attribute("usuario");
+            Long idComentario = Long.parseLong(req.params("id"));
+            Reaccion reaccion = new Reaccion();
+            reaccion.setUsuario(usuario);
+            reaccion.setReaccion(false);
+            reaccion.setTiempo(getFechaActual());
+            Comentario comentario = comentarioORM.getComentario(idComentario);
+            reaccion.setComentario(comentario);
+            Reaccion re = reaccionORM.checkLikeComentario(usuario,comentario);
+            if(re == null){
+                reaccionORM.guardarLike(reaccion);
+                res.redirect("/home");
+            }else{
+                reaccionORM.deleteLike(re);
+
+                if(re.isReaccion())
+                    reaccionORM.updateLike(re,false);
+
+                res.redirect("/home");
+            }
+
+            return "";
+        });
+
         post("/post/:id/dislike", (req, res) -> {
 
             Usuario usuario = req.session(true).attribute("usuario");
@@ -253,7 +305,7 @@ public class Main {
             reaccion.setTiempo(getFechaActual());
             Post post = postORM.getPost(idPost);
             reaccion.setPost(post);
-            Reaccion re = reaccionORM.checkLike(usuario,post);
+            Reaccion re = reaccionORM.checkLikePost(usuario,post);
             if(re == null){
                 reaccionORM.guardarLike(reaccion);
                 res.redirect("/home");
@@ -355,6 +407,10 @@ public class Main {
 
             Collections.sort(uMuro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
 
+            List<Comentario> comentarios = comentarioORM.getComments();
+            List<Reaccion> reaccions = reaccionORM.getReacciones();
+            atr.put("comentarios",comentarios);
+            atr.put("reacciones",reaccions);
             atr.put("usuarioP",uNuevo);
             atr.put("muroP",uMuro);
             atr.put("usuario",usuario);
@@ -375,8 +431,13 @@ public class Main {
                 }
             }
             List<Post> muro = usuario.getMuro();
+
+            List<Comentario> comentarios = comentarioORM.getComments();
+            List<Reaccion> reaccions = reaccionORM.getReacciones();
             atr.put("usuario",usuario);
             atr.put("muro",muro);
+            atr.put("comentarios",comentarios);
+            atr.put("reacciones",reaccions);
             template.process(atr,writer);
             return writer;
         });

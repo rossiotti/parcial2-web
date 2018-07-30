@@ -257,12 +257,15 @@
                             <#assign countLikes = 0>
                             <#assign countDislikes = 0>
                                <#list reacciones as likes>
-                                <#if likes.post.id == post.id>
-                                <#if likes.reaccion == true>
-                                <#assign countLikes = countLikes + 1>
-                                <#else>
-                                <#assign countDislikes = countDislikes + 1>
-                                </#if>
+                                  <#if likes.post??>
+                                     <#if likes.post.id == post.id>
+                                        <#if likes.reaccion == true>
+                                           <#assign countLikes = countLikes + 1>
+                                        <#else>
+                                           <#assign countDislikes = countDislikes + 1>
+                                      </#if>
+
+                                      </#if>
                                 </#if>
                                </#list>
                             </#if>
@@ -281,7 +284,33 @@
                                 <#list comentarios as comments>
                                 <#if comments.post.id == post.id>
                                  <ul>
-                                     <li><b>${comments.autor.nombre} ${comments.autor.apellidos}</b> ${comments.comentario}</li>
+                                     <li><b>${comments.autor.nombre} ${comments.autor.apellidos}</b> ${comments.comentario} <div class="reaction">
+
+
+                                   <#if reacciones??>
+                                     <#assign countLikes = 0>
+                                     <#assign countDislikes = 0>
+                                     <#list reacciones as likes>
+                                     <#if likes.comentario??>
+                                       <#if likes.comentario.id == comments.id>
+                                     <#if likes.reaccion == true>
+                                     <#assign countLikes = countLikes + 1>
+                                     <#else>
+                                     <#assign countDislikes = countDislikes + 1>
+                                     </#if>
+                                     </#if>
+                                     </#if>
+
+                                       </#list>
+                                   </#if>
+
+                                         <form class="btn-group" action="/comentario/${comments.id}/like" method="post">
+                                             <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
+                                         </form>
+                                         <form class="btn-group" action="/comentario/${comments.id}/dislike" method="post">
+                                             <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
+                                         </form>
+                                     </div></li>
                                  </ul>
                                 </#if>
                                 </#list>
