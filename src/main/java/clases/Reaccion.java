@@ -23,6 +23,9 @@ public class Reaccion {
     @JoinColumn(name = "ID_Album")
     private Album album;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
+
     @ManyToOne
     @JoinColumn(name = "ID_Comentario")
     private Comentario comentario;
@@ -85,5 +88,13 @@ public class Reaccion {
 
     public void setTiempo(Timestamp tiempo) {
         this.tiempo = tiempo;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

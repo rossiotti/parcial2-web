@@ -19,6 +19,10 @@ public class Comentario {
     @ManyToOne(fetch = FetchType.LAZY)
     private Imagen imagen;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post post;
+
+
     private Timestamp tiempo;
 
     public Long getId() {
@@ -59,5 +63,13 @@ public class Comentario {
 
     public void setTiempo(Timestamp tiempo) {
         this.tiempo = tiempo;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
     }
 }

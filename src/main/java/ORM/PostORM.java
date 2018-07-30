@@ -37,19 +37,10 @@ public class PostORM {
         em.getTransaction().commit();
     }
 
-    public void updateLike(Post p, Reaccion reaccion){
-        em.getTransaction().begin();
-        Post po = em.find(Post.class,p.getId());
-        po.getReaccions().remove(reaccion);
-        Reaccion re = em.find(Reaccion.class,reaccion.getId());
-        em.remove(re);
-        em.merge(po);
-        em.getTransaction().commit();
-    }
+    public List<Post> getMuro(Usuario usuario){
 
-    public List<Post> getMuro(){
-
-        Query query = em.createQuery("select p from Post p order by p.tiempo desc");
+        Query query = em.createQuery("select p from Post p where p.usuario = ?1 order by p.tiempo desc")
+                .setParameter(1,usuario);
         return (List<Post>)query.getResultList();
     }
 

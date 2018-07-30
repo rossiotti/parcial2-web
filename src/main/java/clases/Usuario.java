@@ -32,7 +32,8 @@ public class Usuario {
     private List<Usuario> amigos;
     private boolean admin;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Post postTag;
 
     public Long getId() {
         return id;
@@ -152,5 +153,13 @@ public class Usuario {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public Post getPostTag() {
+        return postTag;
+    }
+
+    public void setPostTag(Post postTag) {
+        this.postTag = postTag;
     }
 }

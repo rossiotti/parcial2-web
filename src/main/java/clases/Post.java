@@ -17,16 +17,6 @@ public class Post {
 
     private String texto;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Comentario> comentario;
-
-    @OneToMany(fetch = FetchType.EAGER)
-    private List<Reaccion> reaccions;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "Usuario_Post", joinColumns = { @JoinColumn(name = "Id_post") }, inverseJoinColumns = { @JoinColumn(name = "LISTAusuario_ID_usuario") })
-    private List<Usuario> tagUsuarios;
-
     private Timestamp tiempo;
 
     public Long getId() {
@@ -53,21 +43,6 @@ public class Post {
         this.texto = texto;
     }
 
-    public List<Usuario> getTagUsuarios() {
-        return tagUsuarios;
-    }
-
-    public void setTagUsuarios(List<Usuario> tagUsuarios) {
-        this.tagUsuarios = tagUsuarios;
-    }
-
-    public List<Comentario> getComentario() {
-        return comentario;
-    }
-
-    public void setComentario(List<Comentario> comentario) {
-        this.comentario = comentario;
-    }
 
     public Timestamp getTiempo() {
         return tiempo;
@@ -77,11 +52,6 @@ public class Post {
         this.tiempo = tiempo;
     }
 
-    public List<Reaccion> getReaccions() {
-        return reaccions;
-    }
 
-    public void setReaccions(List<Reaccion> reaccions) {
-        this.reaccions = reaccions;
-    }
+
 }

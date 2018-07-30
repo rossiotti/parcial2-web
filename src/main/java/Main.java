@@ -40,12 +40,12 @@ public class Main {
             admin.setPassword("admin");
             admin.setAdmin(true);
             admin.setMuro(new ArrayList<>());
-            admin.setNombre("admin");
-            admin.setApellidos("admin");
+            admin.setNombre("Admin");
+            admin.setApellidos("Istrador");
             admin.setEmail("hokage@admin.com");
             admin.setNacimientoFecha("10/10/1996");
             admin.setAmigos(new ArrayList<>());
-            admin.setLugarTrabajo("Como admin en Bingobook");
+            admin.setLugarTrabajo("Como admin en SocialBuddy");
             admin.setLugarResidencia("Konoha");
             admin.setLugarEstudio("La academina ninja");
             admin.setLugarNacimiento("Konoha");
@@ -106,11 +106,16 @@ public class Main {
                 smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
 
             }
+         //   List<Post> muro = postORM.getMuro(usuario);
             List<Post> muro = usuario.getMuro();
             Collections.sort(muro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
 
+            List<Comentario> comentarios = comentarioORM.getComments();
+            List<Reaccion> reaccions = reaccionORM.getReacciones();
             atr.put("usuario",usuario);
             atr.put("muro",muro);
+            atr.put("comentarios",comentarios);
+            atr.put("reacciones",reaccions);
             template.process(atr,writer);
             return writer;
         });
@@ -196,9 +201,7 @@ public class Main {
             Post post = new Post();
             post.setTexto(texto);
             post.setUsuario(usuario);
-            post.setReaccions(new ArrayList<>());
             post.setTiempo(getFechaActual());
-            post.setComentario(new ArrayList<>());
             postORM.guardarPost(post);
 
             if(usuarioP.equalsIgnoreCase("muro")){
@@ -218,86 +221,51 @@ public class Main {
         post("/post/:id/like", (req, res) -> {
             Usuario usuario = req.session(true).attribute("usuario");
             Long idPost = Long.parseLong(req.params("id"));
-
             Reaccion reaccion = new Reaccion();
             reaccion.setUsuario(usuario);
             reaccion.setReaccion(true);
             reaccion.setTiempo(getFechaActual());
-
-            int index = 0;
-            for(int i = 0; i< usuario.getMuro().size(); i++){
-                if(usuario.getMuro().get(i).getId() == idPost)
-                    index = i;
-            }
-            if(usuario.getMuro().get(index).getReaccions().size() == 0){
+            Post post = postORM.getPost(idPost);
+            reaccion.setPost(post);
+            Reaccion re = reaccionORM.checkLike(usuario,post);
+            if(re == null){
                 reaccionORM.guardarLike(reaccion);
-                postORM.getPost(idPost).getReaccions().add(reaccion);
-                usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
-                postORM.addLike(postORM.getPost(idPost));
+                res.redirect("/home");
             }else{
-                System.out.println("Entro");
-                for(int j = 0; j<usuario.getMuro().get(index).getReaccions().size(); j++){
-                    if(!usuario.getMuro().get(index).getReaccions().get(j).getUsuario().getId().equals(usuario.getId())){
-                        reaccionORM.guardarLike(reaccion);
-                        postORM.getPost(idPost).getReaccions().add(reaccion);
-                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
-                        postORM.addLike(postORM.getPost(idPost));
-                    }else{
-                        postORM.getPost(idPost).getReaccions().remove(j);
-                        postORM.addLike(postORM.getPost(idPost));
-                        reaccionORM.deleteLike(usuario.getMuro().get(index).getReaccions().get(j));
-                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().remove(j);
-                        postORM.addLike(postORM.getPost(idPost));
-                    }
-                }
+                reaccionORM.deleteLike(re);
+
+                if(!re.isReaccion())
+                    reaccionORM.updateLike(re,true);
+
+                res.redirect("/home");
             }
 
-
-
-            res.redirect("/home");
             return "";
             });
 
         post("/post/:id/dislike", (req, res) -> {
+
             Usuario usuario = req.session(true).attribute("usuario");
             Long idPost = Long.parseLong(req.params("id"));
-
             Reaccion reaccion = new Reaccion();
             reaccion.setUsuario(usuario);
             reaccion.setReaccion(false);
             reaccion.setTiempo(getFechaActual());
-
-            int index = 0;
-            for(int i = 0; i< usuario.getMuro().size(); i++){
-                if(usuario.getMuro().get(i).getId() == idPost)
-                    index = i;
-            }
-            if(usuario.getMuro().get(index).getReaccions().size() == 0){
+            Post post = postORM.getPost(idPost);
+            reaccion.setPost(post);
+            Reaccion re = reaccionORM.checkLike(usuario,post);
+            if(re == null){
                 reaccionORM.guardarLike(reaccion);
-                postORM.getPost(idPost).getReaccions().add(reaccion);
-                usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
-                postORM.addLike(postORM.getPost(idPost));
+                res.redirect("/home");
             }else{
-                System.out.println("Entro");
-                for(int j = 0; j<usuario.getMuro().get(index).getReaccions().size(); j++){
-                    if(!usuario.getMuro().get(index).getReaccions().get(j).getUsuario().getId().equals(usuario.getId())){
-                        reaccionORM.guardarLike(reaccion);
-                        postORM.getPost(idPost).getReaccions().add(reaccion);
-                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().add(reaccion);
-                        postORM.addLike(postORM.getPost(idPost));
-                    }else{
-                        postORM.getPost(idPost).getReaccions().remove(j);
-                        postORM.addLike(postORM.getPost(idPost));
-                        reaccionORM.deleteLike(usuario.getMuro().get(index).getReaccions().get(j));
-                        usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getReaccions().remove(j);
-                        postORM.addLike(postORM.getPost(idPost));
-                    }
-                }
+                reaccionORM.deleteLike(re);
+
+                if(re.isReaccion())
+                    reaccionORM.updateLike(re,false);
+
+                res.redirect("/home");
             }
 
-
-
-            res.redirect("/home");
             return "";
         });
 
@@ -453,18 +421,8 @@ public class Main {
             c.setAutor(usuario);
             c.setComentario(comentario);
             c.setTiempo(getFechaActual());
-
-            int index = 0;
+            c.setPost(postORM.getPost(idPost));
             comentarioORM.guardarComentario(c);
-            postORM.getPost(idPost).getComentario().add(c);
-            for(int i = 0; i< usuario.getMuro().size(); i++){
-                if(usuario.getMuro().get(i).getId() == idPost)
-                    index = i;
-            }
-            usuarioORM.getUsuarioId(usuario.getId()).getMuro().get(index).getComentario().add(c);
-            postORM.addComentario(postORM.getPost(idPost));
-
-
             res.redirect("/home");
             return null;
         });

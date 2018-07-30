@@ -42,7 +42,7 @@ public class ComentarioORM {
 
     public List<Comentario> getComments(){
         try{
-            Query query = em.createQuery("select c from Comentario c order by c.tiempo desc");
+            Query query = em.createQuery("select c from Comentario c");
             return (List<Comentario>)query.getResultList();
         }catch (NoResultException e){
             return null;

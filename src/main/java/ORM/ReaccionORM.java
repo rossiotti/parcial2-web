@@ -20,14 +20,16 @@ public class ReaccionORM {
 
     }
 
+    public List<Reaccion> getReacciones(){
 
-    public List<Reaccion> getReacciones(Post post){
+        try{
+            Query query = em.createQuery("select r from Reaccion r");
+            return (List<Reaccion>)query.getResultList();
 
-        Query query = em.createQuery("select lr.reaccions from Post lr where lr.id = ?1")
-                .setParameter(1,post.getId());
-        return (List<Reaccion>)query.getResultList();
+        }catch (NoResultException e){
+            return null;
+        }
     }
-
     public void deleteLike(Reaccion r){
         em.getTransaction().begin();
         Reaccion re = em.find(Reaccion.class,r.getId());
@@ -40,6 +42,17 @@ public class ReaccionORM {
         r.setReaccion(valor);
         em.merge(r);
         em.getTransaction().commit();
+    }
+
+    public Reaccion checkLike(Usuario Usuario, Post post){
+        try{
+            Query query = em.createQuery("select r from Reaccion r where r.post = ?1 AND r.usuario = ?2")
+                    .setParameter(1, post)
+                    .setParameter(2, Usuario);
+            return (Reaccion)query.getSingleResult();
+        } catch(NoResultException e){
+            return null;
+        }
     }
 
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Perfil de ${usuario.nombre} ${usuario.apellidos}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
     <script src="js/jquery-3.2.0.min.js"></script>
@@ -251,15 +251,18 @@
                      <div class="col-sm-8 col-sm-offset-2 data-post">
                          <p>${post.texto}</p>
                          <div class="reaction">
-                             <#assign countLikes = 0>
-                             <#assign countDislikes = 0>
 
-                            <#if post.reaccions?size &gt; 0>
-                               <#list post.reaccions as likes>
+
+                            <#if reacciones??>
+                            <#assign countLikes = 0>
+                            <#assign countDislikes = 0>
+                               <#list reacciones as likes>
+                                <#if likes.post.id == post.id>
                                 <#if likes.reaccion == true>
                                 <#assign countLikes = countLikes + 1>
                                 <#else>
                                 <#assign countDislikes = countDislikes + 1>
+                                </#if>
                                 </#if>
                                </#list>
                             </#if>
@@ -274,11 +277,13 @@
 
                          <div class="comments">
 
-                             <#if post.comentario?size &gt; 0>
-                                <#list post.comentario as comentarios>
-                                   <ul>
-                                       <li><b>${comentarios.autor.nombre} ${comentarios.autor.apellidos}</b> ${comentarios.comentario}</li>
-                                   </ul>
+                             <#if comentarios??>
+                                <#list comentarios as comments>
+                                <#if comments.post.id == post.id>
+                                 <ul>
+                                     <li><b>${comments.autor.nombre} ${comments.autor.apellidos}</b> ${comments.comentario}</li>
+                                 </ul>
+                                </#if>
                                 </#list>
                              </#if>
                              <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">

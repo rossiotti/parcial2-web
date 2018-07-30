@@ -170,7 +170,6 @@ public class UsuarioORM {
             .getResultList();
             return l;
 
-
     }
 
     public Usuario getUsuarioUsername(String nombre){
