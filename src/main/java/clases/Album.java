@@ -12,8 +12,6 @@ public class Album {
     @SequenceGenerator(name="alb_generator", sequenceName = "alb_seq", allocationSize=1)
     private Long id;
 
-    private String titulo;
-
     @OneToOne
     private Usuario creador;
 
@@ -28,14 +26,6 @@ public class Album {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     public Usuario getCreador() {

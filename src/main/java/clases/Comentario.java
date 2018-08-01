@@ -22,6 +22,7 @@ public class Comentario {
     private Post post;
 
 
+
     private Timestamp tiempo;
 
     public Long getId() {

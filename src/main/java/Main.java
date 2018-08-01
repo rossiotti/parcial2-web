@@ -44,6 +44,7 @@ public class Main {
             admin.setEmail("hokage@admin.com");
             admin.setNacimientoFecha("10/10/1996");
             admin.setAmigos(new ArrayList<>());
+            admin.setAlbumes(new ArrayList<>());
             admin.setLugarTrabajo("Como admin en SocialBuddy");
             admin.setLugarResidencia("Konoha");
             admin.setLugarEstudio("La academina ninja");
@@ -112,8 +113,11 @@ public class Main {
             List<Comentario> comentarios = comentarioORM.getComments();
             List<Reaccion> reaccions = reaccionORM.getReacciones();
             List<Album> albumes = albumORM.getAlbums();
+            List<Post> albumPosts = albumORM.getAlbumsPosts();
+            System.out.println(albumPosts);
             atr.put("usuario",usuario);
             atr.put("muro",muro);
+            atr.put("albumPosts",albumPosts);
             atr.put("albumes",albumes);
             atr.put("comentarios",comentarios);
             atr.put("reacciones",reaccions);
@@ -180,6 +184,7 @@ public class Main {
                 usuario.setApellidos(apellidos);
                 usuario.setMuro(new ArrayList<>());
                 usuario.setAmigos(new ArrayList<>());
+                usuario.setAlbumes(new ArrayList<>());
                 usuario.setAdmin(false);
 
                 usuarioORM.guardarUsuario(usuario);
@@ -259,11 +264,9 @@ public class Main {
             req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("src/main/resources/templates/subidas/"));
             Collection<Part> parts = null;
 
-            String titulo = req.queryParams("titulo");
             String descripcion = req.queryParams("descripcion");
             Album album = new Album();
             album.setCreador(usuario);
-            album.setTitulo(titulo);
             album.setTiempo(getFechaActual());
             album.setDescripcion(descripcion);
             albumORM.guardarAlbum(album);
@@ -283,6 +286,7 @@ public class Main {
                         Post post = new Post();
                         post.setTexto("n/a");
                         post.setUsuario(usuario);
+                        System.out.println(part.getSubmittedFileName());
                         post.setImagenPath(part.getSubmittedFileName());
                         post.setTiempo(getFechaActual());
                         post.setAlbum(album);
@@ -290,18 +294,18 @@ public class Main {
 
                     }
                 }
-                String usuarioP = req.params("user");
-                if(usuarioP.equalsIgnoreCase("muro")){
-                    usuarioORM.addAlbum(usuario,album);
-                    res.redirect("/home");
 
-                }else{
-                    usuarioORM.addAlbum(usuarioORM.getUsuarioUsername(usuarioP),album);
-                    res.redirect("/perfil?user="+usuarioP);
-                }
 
             }
+            String usuarioP = req.params("user");
+            if(usuarioP.equalsIgnoreCase("muro")){
+                usuarioORM.addAlbum(usuario,album);
+                res.redirect("/home");
 
+            }else{
+                usuarioORM.addAlbum(usuarioORM.getUsuarioUsername(usuarioP),album);
+                res.redirect("/perfil?user="+usuarioP);
+            }
             return"";
 
         });

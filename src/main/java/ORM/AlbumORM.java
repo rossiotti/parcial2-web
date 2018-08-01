@@ -1,6 +1,7 @@
 package ORM;
 
 import clases.Album;
+import clases.Post;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,6 +24,17 @@ public class AlbumORM {
         try{
             Query query = em.createQuery("select a from Album a");
             return (List<Album>)query.getResultList();
+
+        }catch (NoResultException e){
+            return null;
+        }
+    }
+
+    public List<Post> getAlbumsPosts(){
+
+        try{
+            Query query = em.createQuery("select p from Post p where p.album != null");
+            return (List<Post>)query.getResultList();
 
         }catch (NoResultException e){
             return null;

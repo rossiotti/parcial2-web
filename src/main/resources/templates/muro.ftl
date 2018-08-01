@@ -239,7 +239,7 @@
                         <div class="modal-body">
                             <form action="/crearAlbum/muro" method="post" id="crearAlbumForm" novalidate="novalidate" enctype="multipart/form-data">
                                 <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield" >
-                                    <textarea class="form-control" name="texto" id="textoMuro" placeholder="Descripcion del Album..." rows="3" ></textarea>
+                                    <textarea class="form-control" name="descripcion" id="textoMuro" placeholder="Descripcion del Album..." rows="3" ></textarea>
                                     <input type="file" name="imagen" accept=".png,.jpg,.gif" multiple>
                                 </div>
 
@@ -259,36 +259,70 @@
 <span><a href="/sugerirAmigos?pagina=1" title="Sugerencias"><span class="hidden-xs hidden-sm">Ver Personas</span> <i class="fa fa-user-plus" aria-hidden="true"></i></a>
             </span>
 </#if>
+
+   <#if albumes?size &gt; 0>
+   <#list albumes as album>
+          <div class="card-post">
+              <div class="row">
+                  <div class="col-xs-3 col-sm-2">
+                      <a href="/perfil?user=${usuario.username}" title="Profile">
+                          <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                      </a>
+                  </div>
+                  <div class="col-xs-9 col-sm-10 info-user">
+
+                      <form name="submitForm" method="get" action="/perfil">
+                          <strong><a href="/perfil?user=${album.creador.username}">${album.creador.nombre} ${album.creador.apellidos}</a></strong>
+                      </form>
+                      <p><i>${album.tiempo}</i></p>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-8 col-sm-offset-2 data-post">
+                      <p>${album.descripcion}</p>
+                      <br>
+                      <div id="myCarousel${album_index}" class="carousel">
+                          <div class="carousel-inner">
+                              <#assign activo = 0>
+                              <#list albumPosts as post>
+                              <#if album.id == post.album.id>
+                              <#if activo == 0>
+                              <div class="item active">
+                                  <img src="subidas/${post.imagenPath}">
+                              </div>
+                              <#assign activo = activo + 1>
+                              <#else>
+                              <div class="item">
+                                  <img src="subidas/${post.imagenPath}">
+                              </div>
+                              </#if>
+
+                              </#if>
+                              </#list>
+
+                          </div>
+                              <a class="left carousel-control" href="#myCarousel${album_index}" data-slide="prev">
+                                  <span class="fa fa-angle-left" aria-hidden="true"></span>
+                                  <span class="sr-only">Previous</span>
+                              </a>
+                              <a class="right carousel-control" href="#myCarousel${album_index}" data-slide="next">
+                                  <span class="fa fa-angle-right" aria-hidden="true"></span>
+                                  <span class="sr-only">Next</span>
+                              </a>
+
+                          </div>
+
+                  </div>
+              </div>
+          </div>
+   </#list>
+   </#if>
+
         <#if usuario.muro?size &gt; 0>
 
           <#list muro as post>
 
-          <#if albumes??>
-          <#list albumes as album>
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner">
-                    <#if album.id == post.id>
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" src="subidas/${post.imagenPath}" alt="First slide">
-                    </div>
-                    </#if>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-          </#list>
-          </#if>
+
 
 
              <div class="card-post">
@@ -310,7 +344,7 @@
                      <div class="col-sm-8 col-sm-offset-2 data-post">
                          <p>${post.texto}</p>
                          <#if post.imagenPath !="">
-                            <img src="subidas/${post.imagenPath}" class="img-fluid img-thumbnail">
+                            <img src="subidas/${post.imagenPath}" class="img-rounded">
                          </#if>
                          <div class="reaction">
 
