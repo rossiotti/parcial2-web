@@ -28,6 +28,10 @@ public class Usuario {
     private List<Post> muro;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "Album_Post", joinColumns = { @JoinColumn(name = "Id_usuarioAlbum") }, inverseJoinColumns = { @JoinColumn(name = "Album_ID_post") })
+    private List<Album> albumes;
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Usuario_Amigos", joinColumns = { @JoinColumn(name = "Id_usuario") }, inverseJoinColumns = { @JoinColumn(name = "LISTAusuarioAmigo_ID_usuarioAmigo") })
     private List<Usuario> amigos;
     private boolean admin;
@@ -143,6 +147,8 @@ public class Usuario {
         return muro;
     }
 
+
+
     public void setMuro(List<Post> muro) {
         this.muro = muro;
     }
@@ -161,5 +167,13 @@ public class Usuario {
 
     public void setPostTag(Post postTag) {
         this.postTag = postTag;
+    }
+
+    public List<Album> getAlbumes() {
+        return albumes;
+    }
+
+    public void setAlbumes(List<Album> albumes) {
+        this.albumes = albumes;
     }
 }

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/buttons.css" type="text/css">
 
+
     <#if !usuario.lugarNacimiento??>
     <script type="text/javascript">
         $(window).on('load',function(){
@@ -208,9 +209,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="/crearPost/muro" method="post" id="loginForm" novalidate="novalidate">
-                            <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield">
-                                <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3"></textarea>                            </div>
+                        <form action="/crearPost/muro" method="post" id="crearPostForm" novalidate="novalidate" enctype="multipart/form-data">
+                            <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield" >
+                                <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3" ></textarea>
+                                <input type="file" name="imagen" accept=".png,.jpg,.gif" multiple>
+                            </div>
 
                     </div>
                     <div class="modal-footer">
@@ -222,6 +225,34 @@
             </div>
     </div>
 
+        <div>
+            <button type="button" class="btn btn-primary btn-circle btn-xl" data-toggle="modal" data-target="#AlbumFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-plus"></i></button>
+            <div class="modal fade" id="AlbumFormModal" tabindex="-1" role="dialog" aria-labelledby="AlbumForm">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title" id="exampleModalLongTitle">Nuevo Album</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/crearAlbum/muro" method="post" id="crearAlbumForm" novalidate="novalidate" enctype="multipart/form-data">
+                                <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield" >
+                                    <textarea class="form-control" name="texto" id="textoMuro" placeholder="Descripcion del Album..." rows="3" ></textarea>
+                                    <input type="file" name="imagen" accept=".png,.jpg,.gif" multiple>
+                                </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" data-upgraded=",MaterialButton,MaterialRipple">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     <div id="posts-container" class="container-fluid container-posts">
 <#if usuario.muro?size == 0>
 <h2>Parece que no tienes amigos, aqui hay algunas personas que tal vez conozcas:</h2>
@@ -231,6 +262,34 @@
         <#if usuario.muro?size &gt; 0>
 
           <#list muro as post>
+
+          <#if albumes??>
+          <#list albumes as album>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <#if album.id == post.id>
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="subidas/${post.imagenPath}" alt="First slide">
+                    </div>
+                    </#if>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+          </#list>
+          </#if>
+
 
              <div class="card-post">
                  <div class="row">
@@ -250,6 +309,9 @@
                  <div class="row">
                      <div class="col-sm-8 col-sm-offset-2 data-post">
                          <p>${post.texto}</p>
+                         <#if post.imagenPath !="">
+                            <img src="subidas/${post.imagenPath}" class="img-fluid img-thumbnail">
+                         </#if>
                          <div class="reaction">
 
 

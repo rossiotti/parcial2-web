@@ -1,17 +1,15 @@
-import ORM.ComentarioORM;
-import ORM.PostORM;
-import ORM.ReaccionORM;
-import ORM.UsuarioORM;
-import clases.Comentario;
-import clases.Post;
-import clases.Reaccion;
-import clases.Usuario;
+import ORM.*;
+import clases.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.jasypt.util.text.BasicTextEncryptor;
 import spark.Session;
+import spark.utils.IOUtils;
 
-import java.io.StringWriter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletException;
+import javax.servlet.http.Part;
+import java.io.*;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
@@ -23,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
         //org.h2.tools.Server.createTcpServer().start();
-        staticFiles.location("/templates");
+        staticFiles.externalLocation("src/main/resources/templates");
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setClassForTemplateLoading(Main.class, "/");
 
@@ -32,6 +30,7 @@ public class Main {
         ORM.PostORM postORM = new PostORM();
         ORM.ComentarioORM comentarioORM = new ComentarioORM();
         ORM.ReaccionORM reaccionORM = new ReaccionORM();
+        ORM.AlbumORM albumORM = new AlbumORM();
 
 
         if(usuarioORM.countUsuarios() == 0){
@@ -112,8 +111,10 @@ public class Main {
 
             List<Comentario> comentarios = comentarioORM.getComments();
             List<Reaccion> reaccions = reaccionORM.getReacciones();
+            List<Album> albumes = albumORM.getAlbums();
             atr.put("usuario",usuario);
             atr.put("muro",muro);
+            atr.put("albumes",albumes);
             atr.put("comentarios",comentarios);
             atr.put("reacciones",reaccions);
             template.process(atr,writer);
@@ -194,13 +195,47 @@ public class Main {
 
         post("/crearPost/:user", (req, res) -> {
 
+
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("src/main/resources/templates/subidas/"));
+            Part filePart = req.raw().getPart("imagen");
+
+            try (InputStream inputStream = filePart.getInputStream()) {
+
+                OutputStream outputStream = new FileOutputStream("src/main/resources/templates/subidas/" + filePart.getSubmittedFileName());
+                IOUtils.copy(inputStream, outputStream);
+                outputStream.close();
+            } catch (FileNotFoundException e) {
+                Usuario usuario = req.session(true).attribute("usuario");
+                String texto = req.queryParams("texto");
+                String usuarioP = req.params("user");
+                Post post = new Post();
+                post.setTexto(texto);
+                post.setUsuario(usuario);
+                post.setImagenPath("");
+                post.setTiempo(getFechaActual());
+                postORM.guardarPost(post);
+
+
+                if(usuarioP.equalsIgnoreCase("muro")){
+                    usuarioORM.addPost(usuario,post);
+                    res.redirect("/home");
+
+                }else{
+                    usuarioORM.addPost(usuarioORM.getUsuarioUsername(usuarioP),post);
+                    res.redirect("/perfil?user="+usuarioP);
+                }
+
+                return "";
+
+            }
+
             Usuario usuario = req.session(true).attribute("usuario");
             String texto = req.queryParams("texto");
             String usuarioP = req.params("user");
-            System.out.println(usuarioP);
             Post post = new Post();
             post.setTexto(texto);
             post.setUsuario(usuario);
+            post.setImagenPath(filePart.getSubmittedFileName());
             post.setTiempo(getFechaActual());
             postORM.guardarPost(post);
 
@@ -213,8 +248,61 @@ public class Main {
                 res.redirect("/perfil?user="+usuarioP);
             }
 
+            return"";
 
-            return "";
+        });
+
+
+        post("/crearAlbum/:user", (req, res) -> {
+
+            Usuario usuario = req.session(true).attribute("usuario");
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("src/main/resources/templates/subidas/"));
+            Collection<Part> parts = null;
+
+            String titulo = req.queryParams("titulo");
+            String descripcion = req.queryParams("descripcion");
+            Album album = new Album();
+            album.setCreador(usuario);
+            album.setTitulo(titulo);
+            album.setTiempo(getFechaActual());
+            album.setDescripcion(descripcion);
+            albumORM.guardarAlbum(album);
+            try {
+                parts = req.raw().getParts();
+            } catch (IOException | ServletException e2) {
+                // TODO Auto-generated catch block
+                e2.printStackTrace();
+            }
+            for (Part part : parts) {
+                if(part.getName().equals("imagen")){
+                    try (InputStream inputStream = part.getInputStream()) {
+                        OutputStream outputStream = new FileOutputStream("src/main/resources/templates/subidas/" + part.getSubmittedFileName());
+                        IOUtils.copy(inputStream, outputStream);
+                        outputStream.close();
+
+                        Post post = new Post();
+                        post.setTexto("n/a");
+                        post.setUsuario(usuario);
+                        post.setImagenPath(part.getSubmittedFileName());
+                        post.setTiempo(getFechaActual());
+                        post.setAlbum(album);
+                        postORM.guardarPost(post);
+
+                    }
+                }
+                String usuarioP = req.params("user");
+                if(usuarioP.equalsIgnoreCase("muro")){
+                    usuarioORM.addAlbum(usuario,album);
+                    res.redirect("/home");
+
+                }else{
+                    usuarioORM.addAlbum(usuarioORM.getUsuarioUsername(usuarioP),album);
+                    res.redirect("/perfil?user="+usuarioP);
+                }
+
+            }
+
+            return"";
 
         });
 
@@ -522,6 +610,37 @@ public class Main {
             res.redirect("/home");
             return "";
 
+        });
+
+        get("/gestionUsuario", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/friendList.ftl");
+            int pagina = Integer.parseInt(req.queryParams("pagina"));
+            int maxPagina = (int) Math.ceil(usuarioORM.countUsuarios() / 5);
+            atr.put("pagina", pagina);
+
+            if(pagina >= maxPagina){
+                atr.put("valorSiguiente", 0);
+            }else{
+                atr.put("valorSiguiente", 1);
+            }
+
+            if(pagina <= 1){
+                atr.put("valorAnterior", 0);
+                System.out.println(pagina);
+            }else{
+                atr.put("valorAnterior", 1);
+            }
+
+            atr.put("anterior", (pagina - 1));
+            atr.put("siguiente", (pagina + 1));
+            atr.put("usuario",usuario);
+            atr.put("listaUsuarios",usuarioORM.listarUsuariosTotales(pagina));
+            atr.put("gestion",1);
+            template.process(atr,writer);
+            return writer;
         });
     }
 

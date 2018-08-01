@@ -17,7 +17,12 @@ public class Post {
 
     private String texto;
 
+    private String imagenPath;
+
     private Timestamp tiempo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Album album;
 
     public Long getId() {
         return id;
@@ -52,6 +57,19 @@ public class Post {
         this.tiempo = tiempo;
     }
 
+    public String getImagenPath() {
+        return imagenPath;
+    }
 
+    public void setImagenPath(String imagenPath) {
+        this.imagenPath = imagenPath;
+    }
 
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
 }

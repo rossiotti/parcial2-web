@@ -16,8 +16,7 @@ public class Comentario {
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario autor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Imagen imagen;
+    private String imagenPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
@@ -49,14 +48,6 @@ public class Comentario {
         this.autor = autor;
     }
 
-    public Imagen getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(Imagen imagen) {
-        this.imagen = imagen;
-    }
-
     public Timestamp getTiempo() {
         return tiempo;
     }
@@ -71,5 +62,13 @@ public class Comentario {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public String getImagenPath() {
+        return imagenPath;
+    }
+
+    public void setImagenPath(String imagenPath) {
+        this.imagenPath = imagenPath;
     }
 }

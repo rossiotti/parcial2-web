@@ -14,14 +14,12 @@ public class Album {
 
     private String titulo;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "IMAGEN_ALBUM", joinColumns = { @JoinColumn(name = "ID_Album") }, inverseJoinColumns = { @JoinColumn(name = "Listaimagen_Id_Imagen") })
-    private List<Imagen> imagenList;
-
     @OneToOne
     private Usuario creador;
 
     private Timestamp tiempo;
+
+    private String descripcion;
 
 
     public Long getId() {
@@ -40,14 +38,6 @@ public class Album {
         this.titulo = titulo;
     }
 
-    public List<Imagen> getImagenList() {
-        return imagenList;
-    }
-
-    public void setImagenList(List<Imagen> imagenList) {
-        this.imagenList = imagenList;
-    }
-
     public Usuario getCreador() {
         return creador;
     }
@@ -59,8 +49,15 @@ public class Album {
     public Timestamp getTiempo() {
         return tiempo;
     }
-
     public void setTiempo(Timestamp tiempo) {
         this.tiempo = tiempo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

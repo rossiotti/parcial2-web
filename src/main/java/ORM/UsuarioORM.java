@@ -1,5 +1,6 @@
 package ORM;
 
+import clases.Album;
 import clases.Post;
 import clases.Usuario;
 
@@ -25,6 +26,20 @@ public class UsuarioORM {
                     " or u.lugarNacimiento like ?1 or u.lugarResidencia like ?1 or u.lugarTrabajo like ?1 and u.id != ?2")
                     .setParameter(1,"%"+text+"%")
                     .setParameter(2,id)
+                    .setFirstResult(5*(pagina-1))
+                    .setMaxResults(5);
+
+            return (List<Usuario>)query.getResultList();
+        }catch (NoResultException e){
+            return null;
+        }
+
+    }
+
+    public List<Usuario> listarUsuariosTotales(int pagina){
+
+        try{
+            Query query = em.createQuery("select u from Usuario u")
                     .setFirstResult(5*(pagina-1))
                     .setMaxResults(5);
 
@@ -90,6 +105,15 @@ public class UsuarioORM {
         em.getTransaction().begin();
         Usuario u = em.find(Usuario.class,editar.getId());
         u.getMuro().add(post);
+        em.merge(u);
+        em.getTransaction().commit();
+
+    }
+
+    public void addAlbum(Usuario editar, Album album){
+        em.getTransaction().begin();
+        Usuario u = em.find(Usuario.class,editar.getId());
+        u.getAlbumes().add(album);
         em.merge(u);
         em.getTransaction().commit();
 

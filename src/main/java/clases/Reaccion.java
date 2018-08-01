@@ -15,9 +15,6 @@ public class Reaccion {
     @JoinColumn(name = "ID_Usuario")
     private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "ID_Imagen")
-    private Imagen imagen;
 
     @ManyToOne
     @JoinColumn(name = "ID_Album")
@@ -48,14 +45,6 @@ public class Reaccion {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Imagen getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(Imagen imagen) {
-        this.imagen = imagen;
     }
 
     public Album getAlbum() {
