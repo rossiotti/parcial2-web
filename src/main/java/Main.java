@@ -110,11 +110,15 @@ public class Main {
             List<Post> muro = usuario.getMuro();
             Collections.sort(muro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
 
+            if(req.queryParams("view") != null){
+                atr.put("singleImage",postORM.getPost(Long.parseLong(req.queryParams("single"))));
+                atr.put("view",1);
+            }
+
             List<Comentario> comentarios = comentarioORM.getComments();
             List<Reaccion> reaccions = reaccionORM.getReacciones();
             List<Album> albumes = albumORM.getAlbums();
             List<Post> albumPosts = albumORM.getAlbumsPosts();
-            System.out.println(albumPosts);
             atr.put("usuario",usuario);
             atr.put("muro",muro);
             atr.put("albumPosts",albumPosts);
@@ -320,16 +324,31 @@ public class Main {
             Post post = postORM.getPost(idPost);
             reaccion.setPost(post);
             Reaccion re = reaccionORM.checkLikePost(usuario,post);
+
             if(re == null){
                 reaccionORM.guardarLike(reaccion);
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+
+                }
+
             }else{
                 reaccionORM.deleteLike(re);
 
                 if(!re.isReaccion())
                     reaccionORM.updateLike(re,true);
 
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+                }
             }
 
             return "";
@@ -348,14 +367,24 @@ public class Main {
 
             if(re == null){
                 reaccionORM.guardarLike(reaccion);
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    res.redirect("/home");
+                }
             }else{
                 reaccionORM.deleteLike(re);
 
                 if(!re.isReaccion())
                     reaccionORM.updateLike(re,true);
 
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+                }
             }
 
             return "";
@@ -374,14 +403,26 @@ public class Main {
             Reaccion re = reaccionORM.checkLikeComentario(usuario,comentario);
             if(re == null){
                 reaccionORM.guardarLike(reaccion);
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+                }
             }else{
                 reaccionORM.deleteLike(re);
 
                 if(re.isReaccion())
                     reaccionORM.updateLike(re,false);
 
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+                }
             }
 
             return "";
@@ -400,14 +441,26 @@ public class Main {
             Reaccion re = reaccionORM.checkLikePost(usuario,post);
             if(re == null){
                 reaccionORM.guardarLike(reaccion);
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+                }
             }else{
                 reaccionORM.deleteLike(re);
 
                 if(re.isReaccion())
                     reaccionORM.updateLike(re,false);
 
-                res.redirect("/home");
+                if(req.queryParams("view") != null){
+                    res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+                }else{
+                    if(req.queryParams("index") != null){
+                        res.redirect("/home#post"+req.queryParams("index"));
+                    }
+                }
             }
 
             return "";
@@ -576,7 +629,13 @@ public class Main {
             c.setTiempo(getFechaActual());
             c.setPost(postORM.getPost(idPost));
             comentarioORM.guardarComentario(c);
-            res.redirect("/home");
+            if(req.queryParams("view") != null){
+                res.redirect("/home?single="+req.queryParams("single")+"&view="+req.queryParams("view"));
+            }else{
+                if(req.queryParams("index") != null){
+                    res.redirect("/home#post"+req.queryParams("index"));
+                }
+            }
             return null;
         });
 

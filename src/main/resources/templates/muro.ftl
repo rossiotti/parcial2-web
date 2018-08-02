@@ -17,6 +17,28 @@
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/buttons.css" type="text/css">
 
+    <link href="css/jquery.atwho.css" rel="stylesheet">
+    <script src="js/jquery.caret.js"></script>
+    <script src="js/jquery.atwho.js"></script>
+
+<script>
+    $('#inputor').atwho({
+        at: "@",
+        data:['Peter', 'Tom', 'Anne']
+    })
+</script>
+
+
+    <#if view??>
+    <#if view == 1>
+    <script type="text/javascript">
+        $(window).on('load',function(){
+            $('#CommentsAlbumModal').modal('show');
+        });
+    </script>
+    </#if>
+    </#if>
+
 
     <#if !usuario.lugarNacimiento??>
     <script type="text/javascript">
@@ -281,19 +303,19 @@
                   <div class="col-sm-8 col-sm-offset-2 data-post">
                       <p>${album.descripcion}</p>
                       <br>
-                      <div id="myCarousel${album_index}" class="carousel">
+                      <div id="myCarousel${album_index}" class="carousel slide" data-interval="false">
                           <div class="carousel-inner">
                               <#assign activo = 0>
                               <#list albumPosts as post>
                               <#if album.id == post.album.id>
                               <#if activo == 0>
                               <div class="item active">
-                                  <img src="subidas/${post.imagenPath}">
+                                  <a href="/home?single=${post.id}&view=1"><img src="subidas/${post.imagenPath}" ></a>
                               </div>
                               <#assign activo = activo + 1>
                               <#else>
                               <div class="item">
-                                  <img src="subidas/${post.imagenPath}">
+                                  <a href="/home?single=${post.id}&view=1"><img src="subidas/${post.imagenPath}" ></a>
                               </div>
                               </#if>
 
@@ -301,7 +323,7 @@
                               </#list>
 
                           </div>
-                              <a class="left carousel-control" href="#myCarousel${album_index}" data-slide="prev">
+                              <a class="left carousel-control" href="#myCarousel${album_index}" data-slide="prev" >
                                   <span class="fa fa-angle-left" aria-hidden="true"></span>
                                   <span class="sr-only">Previous</span>
                               </a>
@@ -311,7 +333,6 @@
                               </a>
 
                           </div>
-
                   </div>
               </div>
           </div>
@@ -321,9 +342,6 @@
         <#if usuario.muro?size &gt; 0>
 
           <#list muro as post>
-
-
-
 
              <div class="card-post">
                  <div class="row">
@@ -340,9 +358,9 @@
                          <p><i>${post.tiempo}</i></p>
                      </div>
                  </div>
-                 <div class="row">
+                 <div class="row" >
                      <div class="col-sm-8 col-sm-offset-2 data-post">
-                         <p>${post.texto}</p>
+                         <p id="post${post_index}">${post.texto}</p>
                          <#if post.imagenPath !="">
                             <img src="subidas/${post.imagenPath}" class="img-rounded">
                          </#if>
@@ -366,10 +384,10 @@
                                </#list>
                             </#if>
 
-                             <form class="btn-group" action="/post/${post.id}/like" method="post">
+                             <form class="btn-group" action="/post/${post.id}/like?index=${post_index}" method="post">
                                  <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
                              </form>
-                             <form class="btn-group" action="/post/${post.id}/dislike" method="post">
+                             <form class="btn-group" action="/post/${post.id}/dislike?index=${post_index}" method="post">
                                  <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
                              </form>
                          </div>
@@ -400,10 +418,10 @@
                                        </#list>
                                    </#if>
 
-                                         <form class="btn-group" action="/comentario/${comments.id}/like" method="post">
+                                         <form class="btn-group" action="/comentario/${comments.id}/like?index=${post_index}" method="post">
                                              <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
                                          </form>
-                                         <form class="btn-group" action="/comentario/${comments.id}/dislike" method="post">
+                                         <form class="btn-group" action="/comentario/${comments.id}/dislike?index=${post_index}" method="post">
                                              <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
                                          </form>
                                      </div></li>
@@ -411,8 +429,8 @@
                                 </#if>
                                 </#list>
                              </#if>
-                             <form action="/${post.id}/comentar" method="post" onsubmit="reCom()">
-                                 <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
+                             <form action="/${post.id}/comentar?index=${post_index}" method="post">
+                                 <textarea type="text" class="inputor" placeholder="Add a comment" name="comentario" id="inputor"></textarea>
                              </form>
                          </div>
                      </div>
@@ -504,6 +522,117 @@
             </div>
         </div>
         <!-- Subscribe Form End -->
+           <#if singleImage??>
+           <#assign view =0>
+            <div class="modal fade" id="CommentsAlbumModal" tabindex="-1" role="dialog" aria-labelledby="CommentsAlbumModal">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Imagen</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card-post">
+                                <div class="row">
+                                    <div class="col-xs-3 col-sm-2">
+                                        <a href="/perfil?user=${usuario.username}" title="Profile">
+                                            <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-9 col-sm-10 info-user">
+
+                                        <form name="submitForm" method="get" action="/perfil">
+                                            <strong><a href="/perfil?user=${singleImage.usuario.username}">${singleImage.usuario.nombre} ${singleImage.usuario.apellidos}</a></strong>
+                                        </form>
+                                        <p><i>${singleImage.tiempo}</i></p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-8 col-sm-offset-2 data-post">
+                            <img src="subidas/${singleImage.imagenPath}" class="img-rounded">
+                                        <div class="reaction">
+
+
+                            <#if reacciones??>
+                            <#assign countLikes = 0>
+                            <#assign countDislikes = 0>
+                            <#list reacciones as likes>
+                            <#if likes.post??>
+
+                            <#if likes.post.id == singleImage.id>
+
+
+                            <#if likes.reaccion == true>
+                            <#assign countLikes = countLikes + 1>
+                            <#else>
+                            <#assign countDislikes = countDislikes + 1>
+                            </#if>
+
+                            </#if>
+                            </#if>
+                            </#list>
+                            </#if>
+
+                                            <form class="btn-group" action="/post/${singleImage.id}/like?view=1&single=${singleImage.id}" method="post">
+                                                <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
+                                            </form>
+                                            <form class="btn-group" action="/post/${singleImage.id}/dislike?view=1&single=${singleImage.id}" method="post">
+                                                <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
+                                            </form>
+                                        </div>
+
+                                        <div class="comments">
+
+                             <#if comentarios??>
+                             <#list comentarios as comments>
+                             <#if comments.post.id == singleImage.id>
+                                 <ul>
+                                     <li><b>${comments.autor.nombre} ${comments.autor.apellidos}</b> ${comments.comentario} <div class="reaction">
+
+
+                                   <#if reacciones??>
+                                   <#assign countLikes = 0>
+                                   <#assign countDislikes = 0>
+                                         <#list reacciones as likes>
+                                   <#if likes.comentario??>
+                                   <#if likes.comentario.id == comments.id>
+                                   <#if likes.reaccion == true>
+                                   <#assign countLikes = countLikes + 1>
+                                   <#else>
+                                   <#assign countDislikes = countDislikes + 1>
+                                   </#if>
+                                   </#if>
+                                   </#if>
+
+                                   </#list>
+                                   </#if>
+
+                                         <form class="btn-group" action="/comentario/${comments.id}/like?view=1&single=${singleImage.id}" method="post">
+                                             <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
+                                         </form>
+                                         <form class="btn-group" action="/comentario/${comments.id}/dislike?view=1&single=${singleImage.id}" method="post">
+                                             <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
+                                         </form>
+                                     </div></li>
+                                 </ul>
+                             </#if>
+                             </#list>
+                             </#if>
+                                            <form action="/${singleImage.id}/comentar?view=1&single=${singleImage.id}" method="post">
+                                                <input type="text" class="form-control" placeholder="Add a comment" name="comentario" id="commentArea">
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+           </#if>
+
+                    </div>
+                </div>
+            </div>
 
         <!-- Modal container for settings--->
 <div id="settingsmodal" class="modal fade text-center">

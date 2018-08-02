@@ -22,7 +22,7 @@ public class AlbumORM {
     public List<Album> getAlbums(){
 
         try{
-            Query query = em.createQuery("select a from Album a");
+            Query query = em.createQuery("select a from Album a order by a.tiempo desc");
             return (List<Album>)query.getResultList();
 
         }catch (NoResultException e){
@@ -33,7 +33,7 @@ public class AlbumORM {
     public List<Post> getAlbumsPosts(){
 
         try{
-            Query query = em.createQuery("select p from Post p where p.album != null");
+            Query query = em.createQuery("select p from Post p where p.album != null order by p.tiempo desc");
             return (List<Post>)query.getResultList();
 
         }catch (NoResultException e){
