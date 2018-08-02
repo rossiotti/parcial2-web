@@ -248,7 +248,7 @@
     </div>
 
         <div>
-            <button type="button" class="btn btn-primary btn-circle btn-xl" data-toggle="modal" data-target="#AlbumFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-plus"></i></button>
+            <button type="button" class="btn btn-primary btn-circle btn-xl" data-toggle="modal" data-target="#AlbumFormModal" data-upgraded=",MaterialButton,MaterialRipple"><i class="fa fa-images"></i></button>
             <div class="modal fade" id="AlbumFormModal" tabindex="-1" role="dialog" aria-labelledby="AlbumForm">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
