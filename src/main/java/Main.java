@@ -131,40 +131,13 @@ public class Main {
             return writer;
         });
 
-        get("/home", (req, res) -> {
+        get("/posts/:user", (req, res) -> {
 
-            Usuario usuario = req.session(true).attribute("usuario");
-            StringWriter writer = new StringWriter();
-            Map<String, Object> atr = new HashMap<>();
-            Template template = configuration.getTemplate("templates/muro.ftl");
+            String usuarioP = req.params("user");
 
 
-            if(usuario.getAmigos() != null){
-                for(int i = 0; i < usuario.getAmigos().size(); i++)
-                    smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
-
-            }
-            //   List<Post> muro = postORM.getMuro(usuario);
-            List<Post> muro = usuario.getMuro();
-            Collections.sort(muro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
-
-            if(req.queryParams("view") != null){
-                atr.put("singleImage",postORM.getPost(Long.parseLong(req.queryParams("single"))));
-                atr.put("view",1);
-            }
-
-            List<Comentario> comentarios = comentarioORM.getComments();
-            List<Reaccion> reaccions = reaccionORM.getReacciones();
-            List<Album> albumes = albumORM.getAlbums();
-            List<Post> albumPosts = albumORM.getAlbumsPosts();
-            atr.put("usuario",usuario);
-            atr.put("muro",muro);
-            atr.put("albumPosts",albumPosts);
-            atr.put("albumes",albumes);
-            atr.put("comentarios",comentarios);
-            atr.put("reacciones",reaccions);
-            template.process(atr,writer);
-            return writer;
+            List<Post> muro = postORM.getMuro(usuarioORM.getUsuarioUsername(usuarioP));
+            return muro;
         });
 
         post("/login", (req, res) -> {
