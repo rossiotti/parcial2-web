@@ -19,13 +19,12 @@ public class UsuarioORM {
 
     }
 
-    public List<Usuario> listarUsuarios(int pagina,String text,Long id){
+    public List<Usuario> listarUsuarios(int pagina,String text){
 
         try{
             Query query = em.createQuery("select u from Usuario u where u.username like ?1 or u.nombre like ?1 or u.apellidos like ?1 or u.lugarEstudio like ?1" +
-                    " or u.lugarNacimiento like ?1 or u.lugarResidencia like ?1 or u.lugarTrabajo like ?1 and u.id != ?2")
+                    " or u.lugarNacimiento like ?1 or u.lugarResidencia like ?1 or u.lugarTrabajo like ?1")
                     .setParameter(1,"%"+text+"%")
-                    .setParameter(2,id)
                     .setFirstResult(5*(pagina-1))
                     .setMaxResults(5);
 

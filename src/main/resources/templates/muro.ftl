@@ -13,6 +13,7 @@
     <script src="js/twemoji.min.js"></script>
     <script src="js/lazy-load.min.js"></script>
     <script src="js/socialyte.min.js"></script>
+    <script src="js/tagFill.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet'>
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <link rel="stylesheet" href="css/buttons.css" type="text/css">
@@ -21,12 +22,7 @@
     <script src="js/jquery.caret.js"></script>
     <script src="js/jquery.atwho.js"></script>
 
-<script>
-    $('#inputor').atwho({
-        at: "@",
-        data:['Peter', 'Tom', 'Anne']
-    })
-</script>
+
 
 
     <#if view??>
@@ -430,7 +426,7 @@
                                 </#list>
                              </#if>
                              <form action="/${post.id}/comentar?index=${post_index}" method="post">
-                                 <textarea type="text" class="inputor" placeholder="Add a comment" name="comentario" id="inputor"></textarea>
+                                 <textarea type="text" class="form-control" placeholder="Add a comment" name="comentario" id="inputor"></textarea>
                              </form>
                          </div>
                      </div>
@@ -643,6 +639,14 @@
 </div>
 
 
+            <script>
+                $('.inputor').keydown(function(event) {
+                    if (event.keyCode == 13) {
+                        this.form.submit();
+                        return false;
+                    }
+                });
+            </script>
 
 </body>
 </html>

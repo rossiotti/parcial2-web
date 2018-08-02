@@ -1,5 +1,7 @@
 import ORM.*;
 import clases.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.jasypt.util.text.BasicTextEncryptor;
@@ -128,6 +130,43 @@ public class Main {
             template.process(atr,writer);
             return writer;
         });
+
+        get("/home", (req, res) -> {
+
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/muro.ftl");
+
+
+            if(usuario.getAmigos() != null){
+                for(int i = 0; i < usuario.getAmigos().size(); i++)
+                    smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
+
+            }
+            //   List<Post> muro = postORM.getMuro(usuario);
+            List<Post> muro = usuario.getMuro();
+            Collections.sort(muro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
+
+            if(req.queryParams("view") != null){
+                atr.put("singleImage",postORM.getPost(Long.parseLong(req.queryParams("single"))));
+                atr.put("view",1);
+            }
+
+            List<Comentario> comentarios = comentarioORM.getComments();
+            List<Reaccion> reaccions = reaccionORM.getReacciones();
+            List<Album> albumes = albumORM.getAlbums();
+            List<Post> albumPosts = albumORM.getAlbumsPosts();
+            atr.put("usuario",usuario);
+            atr.put("muro",muro);
+            atr.put("albumPosts",albumPosts);
+            atr.put("albumes",albumes);
+            atr.put("comentarios",comentarios);
+            atr.put("reacciones",reaccions);
+            template.process(atr,writer);
+            return writer;
+        });
+
         post("/login", (req, res) -> {
             String username = req.queryParams("username");
             String password = req.queryParams("password");
@@ -472,8 +511,14 @@ public class Main {
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/friendListRes.ftl");
             int pagina = Integer.parseInt(req.queryParams("pagina"));
-            System.out.println((req).   queryParams("q"));
-            List<Usuario> filtrados = usuarioORM.listarUsuarios(pagina,req.queryParams("q"),usuario.getId());
+            List<Usuario> listado = usuarioORM.listarUsuarios(pagina,req.queryParams("q"));
+            ArrayList<Usuario> filtrados =  new ArrayList<>();
+
+            for(int i = 0; i< listado.size(); i++){
+                if(listado.get(i).getId()!=usuario.getId())
+                    filtrados.add(listado.get(i));
+            }
+
             int maxPagina = (int) Math.ceil(filtrados.size() / 5);
             atr.put("pagina", pagina);
 
@@ -615,7 +660,11 @@ public class Main {
             atr.put("usuario",usuario);
             atr.put("listaAmigos",usuario.getAmigos());
             template.process(atr,writer);
-            return writer;
+
+            Gson gson = new Gson();
+            String json = gson.toJson(usuario.getAmigos());
+
+            return json;
         });
 
         post("/:id/comentar", (req, res) -> {
