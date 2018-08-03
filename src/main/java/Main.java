@@ -1,13 +1,14 @@
 import ORM.*;
 import clases.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.jasypt.util.text.BasicTextEncryptor;
 import spark.Session;
 import spark.utils.IOUtils;
+import java.util.*;
 
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletException;
 import javax.servlet.http.Part;
@@ -26,13 +27,33 @@ public class Main {
         staticFiles.externalLocation("src/main/resources/templates");
         Configuration configuration = new Configuration(Configuration.VERSION_2_3_28);
         configuration.setClassForTemplateLoading(Main.class, "/");
+        class Coordenadas{
+            private String latitud;
+            private String longitud;
 
+            public String getLatitud() {
+                return latitud;
+            }
 
-        ORM.UsuarioORM usuarioORM = new UsuarioORM();
-        ORM.PostORM postORM = new PostORM();
-        ORM.ComentarioORM comentarioORM = new ComentarioORM();
-        ORM.ReaccionORM reaccionORM = new ReaccionORM();
-        ORM.AlbumORM albumORM = new AlbumORM();
+            public void setLatitud(String latitud) {
+                this.latitud = latitud;
+            }
+
+            public String getLongitud() {
+                return longitud;
+            }
+
+            public void setLongitud(String longitud) {
+                this.longitud = longitud;
+            }
+        }
+
+        ArrayList<Coordenadas> coordenadas = new ArrayList<>();
+        UsuarioORM usuarioORM = new UsuarioORM();
+        PostORM postORM = new PostORM();
+        ComentarioORM comentarioORM = new ComentarioORM();
+        ReaccionORM reaccionORM = new ReaccionORM();
+        AlbumORM albumORM = new AlbumORM();
 
 
         if(usuarioORM.countUsuarios() == 0){
@@ -137,7 +158,25 @@ public class Main {
 
 
             List<Post> muro = postORM.getMuro(usuarioORM.getUsuarioUsername(usuarioP));
-            return muro;
+            List<JsonObject> jsonObjectList = new ArrayList<>();
+            if(muro != null){
+                for(int i = 0; i < muro.size(); i++){
+                    if(!muro.get(i).getTexto().equalsIgnoreCase("n/a")){
+                        JsonObject value = Json.createObjectBuilder()
+                                .add("id",muro.get(i).getId())
+                                .add("texto",muro.get(i).getTexto())
+                                .add("tiempo",muro.get(i).getTiempo().toString())
+                                .build();
+
+                        jsonObjectList.add(value);
+                    }
+
+                }
+                return jsonObjectList;
+            }else{
+                return 0;
+            }
+
         });
 
         post("/login", (req, res) -> {
@@ -159,10 +198,26 @@ public class Main {
                             textEncryptor.encrypt(username), (60*60*24*7), false, true);
                 }
                 res.redirect("/");
+                return "Logeado";
             }else {
                 res.redirect("/inicio?invalid=3");
+                return "Error, revisar datos";
             }
-            return "";
+
+        });
+
+        post("/autenticar", (req, res) -> {
+            String username = req.queryParams("username");
+            String password = req.queryParams("password");
+
+
+            Usuario  usuario = usuarioORM.getUsuario(username, password);
+
+            if (usuario != null) {
+                return "Logeado";
+            }else {
+                return "Error, revisar datos";
+            }
 
         });
 
@@ -214,6 +269,43 @@ public class Main {
             return "";
         });
 
+        post("crear/:user",(req, res) ->{
+
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("src/main/resources/templates/subidas/"));
+            Part filePart = req.raw().getPart("imagen");
+
+            try (InputStream inputStream = filePart.getInputStream()) {
+
+                OutputStream outputStream = new FileOutputStream("src/main/resources/templates/subidas/" + filePart.getSubmittedFileName());
+                IOUtils.copy(inputStream, outputStream);
+                outputStream.close();
+            } catch (FileNotFoundException e) {
+                String texto = req.queryParams("texto");
+                String usuario = req.params("user");
+                Usuario u = usuarioORM.getUsuarioUsername(usuario);
+                Post post = new Post();
+                post.setTexto(texto);
+                post.setUsuario(u);
+                post.setImagenPath("");
+                post.setTiempo(getFechaActual());
+                postORM.guardarPost(post);
+
+            }
+            String texto = req.queryParams("texto");
+            String usuario = req.params("user");
+            Usuario u = usuarioORM.getUsuarioUsername(usuario);
+            Post post = new Post();
+            post.setTexto(texto);
+            post.setUsuario(u);
+            post.setImagenPath(filePart.getSubmittedFileName());
+            post.setTiempo(getFechaActual());
+            postORM.guardarPost(post);
+            usuarioORM.addPost(u,post);
+
+            return "Post creado con exito";
+
+            });
+
         post("/crearPost/:user", (req, res) -> {
 
 
@@ -238,7 +330,7 @@ public class Main {
 
 
                 if(usuarioP.equalsIgnoreCase("muro")){
-                    usuarioORM.addPost(usuario,post);
+
                     res.redirect("/home");
 
                 }else{
@@ -581,6 +673,31 @@ public class Main {
             return writer;
         });
 
+        get("/geo", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/geo.ftl");
+            atr.put("location",coordenadas);
+            template.process(atr,writer);
+            return writer;
+        });
+
+        post("/geoPost", (req, res) -> {
+            Usuario usuario = req.session(true).attribute("usuario");
+            StringWriter writer = new StringWriter();
+            Map<String, Object> atr = new HashMap<>();
+            Template template = configuration.getTemplate("templates/geo.ftl");
+            String lat = req.queryParams("latitud");
+            String lon = req.queryParams("longitud");
+            Coordenadas coor = new Coordenadas();
+            coor.setLongitud(lon);
+            coor.setLatitud(lat);
+            coordenadas.add(coor);
+            res.redirect("/geo");
+            return writer;
+        });
+
         get("/timeline", (req, res) -> {
             Usuario usuario = req.session(true).attribute("usuario");
             StringWriter writer = new StringWriter();
@@ -634,10 +751,9 @@ public class Main {
             atr.put("listaAmigos",usuario.getAmigos());
             template.process(atr,writer);
 
-            Gson gson = new Gson();
-            String json = gson.toJson(usuario.getAmigos());
 
-            return json;
+
+            return writer;
         });
 
         post("/:id/comentar", (req, res) -> {
