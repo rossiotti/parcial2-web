@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-<h1>Ejemplo de GeoLocalizacion</h1>
+<h1>Usuarios cerca de mi</h1>
 <p id="posicionGps">
     .....
 </p>
@@ -71,7 +71,7 @@
     var id, cantidad = 0;
     //Indica las opciones para llamar al GPS.
     var opcionesGPS = {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         timeout: 5000,
         maximumAge: 0
     }

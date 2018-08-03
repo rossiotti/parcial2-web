@@ -330,7 +330,7 @@ public class Main {
 
 
                 if(usuarioP.equalsIgnoreCase("muro")){
-
+                    usuarioORM.addPost(usuario,post);
                     res.redirect("/home");
 
                 }else{
