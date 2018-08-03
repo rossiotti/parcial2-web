@@ -415,10 +415,10 @@
                                    </#if>
 
                                          <form class="btn-group" action="/comentario/${comments.id}/like?index=${post_index}" method="post">
-                                             <button class="btn btn-primary btn-sm" type="submit"><i class="fa fa-thumbs-up"></i> ${countLikes}</button>
+                                             <button style="border:none; background-color: transparent;" class="fa fa-thumbs-up" type="submit"> ${countLikes}</button>
                                          </form>
                                          <form class="btn-group" action="/comentario/${comments.id}/dislike?index=${post_index}" method="post">
-                                             <button class="btn btn-danger btn-sm" type="submit"><i class="fa fa-thumbs-down"></i> ${countDislikes}</button>
+                                             <button style="border:none; background-color: transparent;" class="fa fa-thumbs-down" type="submit"> ${countDislikes}</button>
                                          </form>
                                      </div></li>
                                  </ul>
@@ -426,7 +426,7 @@
                                 </#list>
                              </#if>
                              <form action="/${post.id}/comentar?index=${post_index}" method="post">
-                                 <textarea type="text" class="form-control" placeholder="Add a comment" name="comentario" id="inputor"></textarea>
+                                 <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
                              </form>
                          </div>
                      </div>
@@ -640,9 +640,10 @@
 
 
             <script>
-                $('.inputor').keydown(function(event) {
-                    if (event.keyCode == 13) {
-                        this.form.submit();
+                $("#entrada").keypress(function (e) {
+                    if(e.which == 13 && !e.shiftKey) {
+                        $(this).closest("form").submit();
+                        e.preventDefault();
                         return false;
                     }
                 });

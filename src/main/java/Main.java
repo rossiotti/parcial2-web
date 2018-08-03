@@ -5,7 +5,6 @@ import freemarker.template.Template;
 import org.jasypt.util.text.BasicTextEncryptor;
 import spark.Session;
 import spark.utils.IOUtils;
-import java.util.*;
 
 import javax.json.Json;
 import javax.json.JsonObject;

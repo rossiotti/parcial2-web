@@ -159,6 +159,7 @@
 <!-- Friend List ================================================= -->
 <div class="content-posts active">
     <div class="top">
+        <h2></h2>
         <h2>Friend's List</h2>
     </div>
          <#if listaAmigos?size &gt; 0>

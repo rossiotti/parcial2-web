@@ -22,6 +22,7 @@
 <body id="wall">
 
 <!--Header with Nav -->
+<h2></h2>
 <header class="text-right">
     <form action="/buscarPersonas" class="text-left search" method="GET">
         <input name="q" type="text" placeholder="Search..">
@@ -85,7 +86,7 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
-            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-user" aria-hidden="true"></i></a>
+            <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-clock-o" aria-hidden="true"></i></a>
             </span>
     </div>
     <div class="second-icon menu-icon">
