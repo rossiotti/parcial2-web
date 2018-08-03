@@ -120,7 +120,7 @@
 </form>
 
 
-<div id="map"></div>
+<div id="map" class="z-depth-1" style="height: 600px"></div>
 
 <script src="js/jquery-3.2.1.min.js"></script>
 
