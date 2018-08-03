@@ -20,7 +20,7 @@ import static spark.Spark.*;
 
 public class Main {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws Exception {
 
         //org.h2.tools.Server.createTcpServer().start();
         staticFiles.externalLocation("src/main/resources/templates");
@@ -53,6 +53,8 @@ public class Main {
         ComentarioORM comentarioORM = new ComentarioORM();
         ReaccionORM reaccionORM = new ReaccionORM();
         AlbumORM albumORM = new AlbumORM();
+
+        SoapStart.init();
 
 
         if(usuarioORM.countUsuarios() == 0){
