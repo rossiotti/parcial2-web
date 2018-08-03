@@ -1,7 +1,5 @@
 import ORM.*;
 import clases.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.jasypt.util.text.BasicTextEncryptor;
@@ -633,11 +631,7 @@ public class Main {
             atr.put("usuario",usuario);
             atr.put("listaAmigos",usuario.getAmigos());
             template.process(atr,writer);
-
-            Gson gson = new Gson();
-            String json = gson.toJson(usuario.getAmigos());
-
-            return json;
+            return writer;
         });
 
         post("/:id/comentar", (req, res) -> {
