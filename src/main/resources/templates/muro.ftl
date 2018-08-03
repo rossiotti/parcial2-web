@@ -426,7 +426,7 @@
                                 </#list>
                              </#if>
                              <form action="/${post.id}/comentar?index=${post_index}" method="post">
-                                 <textarea type="text" class="form-control" placeholder="Add a comment" name="comentario" id="entrada"></textarea>
+                                 <input type="text" class="form-control" placeholder="Add a comment" name="comentario">
                              </form>
                          </div>
                      </div>

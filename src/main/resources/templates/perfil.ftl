@@ -22,6 +22,7 @@
 <body id="wall">
 
 <!--Header with Nav -->
+<h2></h2>
 <header class="text-right">
     <form action="/buscarPersonas" class="text-left search" method="GET">
         <input name="q" type="text" placeholder="Search..">

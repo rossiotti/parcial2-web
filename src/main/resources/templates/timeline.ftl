@@ -99,6 +99,7 @@
 
 
 <div id="content">
+    <h2></h2>
     <h1>Timeline</h1>
     <ul class="timeline">
 
