@@ -234,7 +234,7 @@
                         <form action="/crearPost/muro" method="post" id="crearPostForm" novalidate="novalidate" enctype="multipart/form-data">
                             <div class="mdl-textfield mdl-js-textfield is-upgraded" data-upgraded=",MaterialTextfield" >
                                 <textarea class="form-control" name="texto" id="textoMuro" placeholder="Que piensas?" rows="3" ></textarea>
-                                <input type="file" name="imagen" accept=".png,.jpg,.gif" multiple>
+                                <input type="file" name="imagen" accept=".png,.jpg,.gif">
                             </div>
 
                     </div>
