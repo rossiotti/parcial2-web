@@ -2,6 +2,7 @@ package ORM;
 
 import clases.Album;
 import clases.Post;
+import clases.Usuario;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,10 +20,11 @@ public class AlbumORM {
 
     }
 
-    public List<Album> getAlbums(){
+    public List<Album> getAlbums(Usuario usuario){
 
         try{
-            Query query = em.createQuery("select a from Album a order by a.tiempo desc");
+            Query query = em.createQuery("select a from Album a where a.creador = ?1 order by a.tiempo desc")
+                    .setParameter(1,usuario);
             return (List<Album>)query.getResultList();
 
         }catch (NoResultException e){

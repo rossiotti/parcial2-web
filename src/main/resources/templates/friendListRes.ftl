@@ -88,6 +88,14 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
+            <span><a href="/sugerirAmigos?pagina=1" title="Sugerencia"><span class="hidden-xs hidden-sm">Sugerir Amigos</span> <i class="fas fa-user-plus" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
+            <span><a href="/geo" title="Geolocalizacion"><span class="hidden-xs hidden-sm">Mapa</span> <i class="fa fa-map" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
             <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-clock-o" aria-hidden="true"></i></a>
             </span>
     </div>

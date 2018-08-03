@@ -85,6 +85,14 @@
         </ul>
     </div>
     <div class="second-icon menu-icon">
+            <span><a href="/sugerirAmigos?pagina=1" title="Sugerencia"><span class="hidden-xs hidden-sm">Sugerir Amigos</span> <i class="fas fa-user-plus" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
+            <span><a href="/geo" title="Geolocalizacion"><span class="hidden-xs hidden-sm">Mapa</span> <i class="fa fa-map" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
             <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-clock-o" aria-hidden="true"></i></a>
             </span>
     </div>
@@ -99,9 +107,68 @@
 
 
 <div id="content">
-    <h2></h2>
     <h1>Timeline</h1>
     <ul class="timeline">
+
+        <#if albumes?size &gt; 0>
+        <#list albumes as album>
+        <li class="event" data-date="${album.tiempo}">
+            <h3>${album.creador.nombre} ${album.creador.apellidos} Creo el album:</h3>
+          <div class="card-post">
+              <div class="row">
+                  <div class="col-xs-3 col-sm-2">
+                      <a href="/perfil?user=${usuario.username}" title="Profile">
+                          <img src="img/user.jpg" alt="User name" class="img-circle img-user">
+                      </a>
+                  </div>
+                  <div class="col-xs-9 col-sm-10 info-user">
+
+                      <form name="submitForm" method="get" action="/perfil">
+                          <strong><a href="/perfil?user=${album.creador.username}">${album.creador.nombre} ${album.creador.apellidos}</a></strong>
+                      </form>
+                      <p><i>${album.tiempo}</i></p>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-sm-8 col-sm-offset-2 data-post">
+                      <p>${album.descripcion}</p>
+                      <br>
+                      <div id="myCarousel${album_index}" class="carousel slide" data-interval="false">
+                          <div class="carousel-inner">
+                              <#assign activo = 0>
+                              <#list albumPosts as post>
+                              <#if album.id == post.album.id>
+                              <#if activo == 0>
+                              <div class="item active">
+                                  <a href="/home?single=${post.id}&view=1"><img src="subidas/${post.imagenPath}" class="img-thumbnail"></a>
+                              </div>
+                              <#assign activo = activo + 1>
+                              <#else>
+                              <div class="item">
+                                  <a href="/home?single=${post.id}&view=1"><img src="subidas/${post.imagenPath}" class="img-thumbnail"></a>
+                              </div>
+                              </#if>
+
+                              </#if>
+                              </#list>
+
+                          </div>
+                          <a class="left carousel-control" href="#myCarousel${album_index}" data-slide="prev" >
+                              <span class="fa fa-angle-left" aria-hidden="true"></span>
+                              <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="right carousel-control" href="#myCarousel${album_index}" data-slide="next">
+                              <span class="fa fa-angle-right" aria-hidden="true"></span>
+                              <span class="sr-only">Next</span>
+                          </a>
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </li>
+        </#list>
+        </#if>
 
         <#if muro?size &gt; 0>
         <#list muro as eventos>
@@ -164,6 +231,7 @@
 
         <#if reacciones??>
         <#list reacciones as reaccion>
+        <#if reaccion.post??>
         <#if reaccion.post.id == eventos.id>
         <li class="event" data-date="${reaccion.tiempo}">
             <h3>${reaccion.usuario.nombre} ${reaccion.usuario.apellidos} reacciono:</h3>
@@ -172,6 +240,7 @@
     <#else>
     <h2>No le gusto</h2>
     </#if>
+        </#if>
             :
             <div class="card-post">
                 <div class="row">

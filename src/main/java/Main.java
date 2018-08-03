@@ -122,15 +122,19 @@ public class Main {
             Map<String, Object> atr = new HashMap<>();
             Template template = configuration.getTemplate("templates/muro.ftl");
 
-
             if(usuario.getAmigos() != null){
-                for(int i = 0; i < usuario.getAmigos().size(); i++)
-                smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
+                for(int i = 0; i < usuario.getAmigos().size(); i++){
+                    smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
+                    smartCombineAlbum(usuario.getAlbumes(),usuario.getAmigos().get(i).getAlbumes());
+                }
+
 
             }
          //   List<Post> muro = postORM.getMuro(usuario);
             List<Post> muro = usuario.getMuro();
             Collections.sort(muro, (o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
+            List<Album> albumes = usuario.getAlbumes();
+            Collections.sort(albumes,(o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
 
             if(req.queryParams("view") != null){
                 atr.put("singleImage",postORM.getPost(Long.parseLong(req.queryParams("single"))));
@@ -139,7 +143,6 @@ public class Main {
 
             List<Comentario> comentarios = comentarioORM.getComments();
             List<Reaccion> reaccions = reaccionORM.getReacciones();
-            List<Album> albumes = albumORM.getAlbums();
             List<Post> albumPosts = albumORM.getAlbumsPosts();
             atr.put("usuario",usuario);
             atr.put("muro",muro);
@@ -707,14 +710,20 @@ public class Main {
             if(usuario.getAmigos() != null){
                 for(int i = 0; i < usuario.getAmigos().size(); i++){
                     smartCombine(usuario.getMuro(),usuario.getAmigos().get(i).getMuro());
+                    smartCombineAlbum(usuario.getAlbumes(),usuario.getAmigos().get(i).getAlbumes());
                 }
             }
             List<Post> muro = usuario.getMuro();
-
+            Collections.sort(muro,(o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
+            List<Album> albumes = usuario.getAlbumes();
+            Collections.sort(albumes,(o1, o2) -> o2.getTiempo().compareTo(o1.getTiempo()));
+            List<Post> albumPosts = albumORM.getAlbumsPosts();
             List<Comentario> comentarios = comentarioORM.getComments();
             List<Reaccion> reaccions = reaccionORM.getReacciones();
             atr.put("usuario",usuario);
             atr.put("muro",muro);
+            atr.put("albumPosts",albumPosts);
+            atr.put("albumes",albumes);
             atr.put("comentarios",comentarios);
             atr.put("reacciones",reaccions);
             template.process(atr,writer);
@@ -846,6 +855,14 @@ public class Main {
 
     public static void smartCombine(List<Post> first, List<Post> second) {
         for(Post num : second) {
+            if(!first.contains(num)) {
+                first.add(num);
+            }
+        }
+    }
+
+    public static void smartCombineAlbum(List<Album> first, List<Album> second) {
+        for(Album num : second) {
             if(!first.contains(num)) {
                 first.add(num);
             }

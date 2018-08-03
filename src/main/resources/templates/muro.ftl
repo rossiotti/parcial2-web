@@ -140,6 +140,10 @@
             </span>
     </div>
     <div class="second-icon menu-icon">
+            <span><a href="/geo" title="Geolocalizacion"><span class="hidden-xs hidden-sm">Mapa</span> <i class="fa fa-map" aria-hidden="true"></i></a>
+            </span>
+    </div>
+    <div class="second-icon menu-icon">
             <span><a href="/timeline" title="Timeline"><span class="hidden-xs hidden-sm">Timeline</span> <i class="fa fa-clock-o" aria-hidden="true"></i></a>
             </span>
     </div>
