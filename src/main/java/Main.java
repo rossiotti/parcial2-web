@@ -276,14 +276,27 @@ public class Main {
         post("crear/:user",(req, res) ->{
 
             req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("src/main/resources/templates/subidas/"));
-            Part filePart = req.raw().getPart("imagen");
 
-            try (InputStream inputStream = filePart.getInputStream()) {
+            if(!req.queryParams("imagen").equalsIgnoreCase("no")){
+                Part filePart = req.raw().getPart("imagen");
+                InputStream inputStream = filePart.getInputStream();
 
                 OutputStream outputStream = new FileOutputStream("src/main/resources/templates/subidas/" + filePart.getSubmittedFileName());
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.close();
-            } catch (FileNotFoundException e) {
+
+                String texto = req.queryParams("texto");
+                String usuario = req.params("user");
+                Usuario u = usuarioORM.getUsuarioUsername(usuario);
+                Post post = new Post();
+                post.setTexto(texto);
+                post.setUsuario(u);
+                post.setImagenPath(filePart.getSubmittedFileName());
+                post.setTiempo(getFechaActual());
+                postORM.guardarPost(post);
+                usuarioORM.addPost(u,post);
+                return "Post creado con exito";
+            }else{
                 String texto = req.queryParams("texto");
                 String usuario = req.params("user");
                 Usuario u = usuarioORM.getUsuarioUsername(usuario);
@@ -293,20 +306,9 @@ public class Main {
                 post.setImagenPath("");
                 post.setTiempo(getFechaActual());
                 postORM.guardarPost(post);
-
+                usuarioORM.addPost(u,post);
+                return "Post creado con exito";
             }
-            String texto = req.queryParams("texto");
-            String usuario = req.params("user");
-            Usuario u = usuarioORM.getUsuarioUsername(usuario);
-            Post post = new Post();
-            post.setTexto(texto);
-            post.setUsuario(u);
-            post.setImagenPath(filePart.getSubmittedFileName());
-            post.setTiempo(getFechaActual());
-            postORM.guardarPost(post);
-            usuarioORM.addPost(u,post);
-
-            return "Post creado con exito";
 
             });
 
