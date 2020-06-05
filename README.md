@@ -2,7 +2,8 @@
 
 ![Alt Text](https://www.ced.org.do/wp-content/uploads/pucmm349x138.png.jpg)
 
-# Social Network App Demo Video,https://www.youtube.com/watch?v=LYRSEE-3DCY
+### Social Network App Demo Video:
+https://www.youtube.com/watch?v=LYRSEE-3DCY
 
 ## Equipo de Trabajo
 
